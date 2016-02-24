@@ -1,0 +1,17 @@
+{
+    "name": "avz-cmf/bigdata",
+    "type": "project",
+    "homepage": "https://github.com/avz-cmf/bigdata",
+    "license": "BSD-3-CLAUSE",
+    "authors": [
+        {
+            "name": "Dima"
+        }
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev",
+            "dev-develop": "1.1-dev"
+        }
+    },
+}
