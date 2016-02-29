@@ -16,7 +16,7 @@ args <- commandArgs(trailingOnly = T);
 confFile = args[1];
 
 # считываем config
-config <- read.table(confFile, sep = ",",header = T);
+config <- read.table(paste(confFile,"config.csv",sep = ""), sep = ",",header = T);
 
 # считываем текущую директорию с config
 myDir = as.character(config[1,6]);
@@ -26,25 +26,25 @@ setwd(myDir);
 
 
 {
-  begDate = args[2];
-  endDate = args[3];
-  CategoryID = ifelse(args[4]!="NA", args[4], "*");
-  brand = ifelse(args[5]!="NA", args[5], "*");
+  begDate = ifelse(args[2]!="NA", paste(" and publish.add_date > '", args[2],"'",sep=""),"");
+  endDate = ifelse(args[3]!="NA", paste(" and publish.add_date < '", args[3],"'",sep=""),"");
+  CategoryID = ifelse(args[4]!="NA", paste(" and products.ebaycategory_id = ", args[4], sep = ""), "");
+  brand = ifelse(args[5]!="NA", paste( " and products.brand = ",args[5], sep = ""), "");
 }# считываем остальные параметры с консоля
 
 # запускаем скрипт с функциями считывания таблиц
 source("readData.R");
 
 # создаем запрос для publish
-queryPublish = paste("select publish.ItemID, publish.price_real, publish.shipping_real ",
-                     "from ", bdName, ".publish", ", ", bdName, ".products ",
-                     "where publish.ProductID=products.ProductID and products.brand = '", myBrand, "' and products.ebaycategory_id = ", category, 
-                     "and publish.add_date >",begDate, " and publish.add_date < ", endDate, ";", sep = "");
+queryPublish =paste("select publish.ItemID, publish.ProductID, publish.price_real, publish.shipping_real ",
+                    "from ", myDbname, ".publish", ", ", myDbname, ".products ",
+                    "where publish.ProductID=products.ProductID", brand, CategoryID,begDate, endDate, ";", sep = "");
+
 # запрос для sold
 querySold = paste("select sold.ItemID ",
-                  "from ", bdName, ".sold ",
-                  "where sold.ItemID in (select publish.ItemID from ",bdName, ".publish, ", bdName, ".products where publish.ProductID = products.ProductID and products.brand = '", myBrand,"' and products.ebaycategory_id = ", category, 
-                  "and publish.add_date >",begDate, " and publish.add_date < ", endDate, ");", sep = "");
+                  "from ", myDbname, ".sold ",
+                  "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", brand, CategoryID, 
+                  begDate, endDate, ");", sep = "");
 
 # считываем таблицу
 data.publish <- readTable(queryPublish);
@@ -56,7 +56,7 @@ if(!checkTable(data.publish) || !checkTable(data.sold))
 }#  если в таблице не достаточно элементов тогда пишем ERROR
 
 # если достаточно элементов тогда рисуем гистограмму
-if(checkData(data.publish) & checkTable(data.sold))
+if(checkTable(data.publish) & checkTable(data.sold))
 {
   # функция обработки таблицы
   data.publish = change.publish();
@@ -104,6 +104,6 @@ if(checkData(data.publish) & checkTable(data.sold))
     return("plotProbPrice");
   }#  функция постороения гистограммы которая возвращает имя 
   
-  plotSoldPrice();# вызов функции построения гистограммы
+  plotProbPrice();  # вызов функции построения гистограммы
   
 }
