@@ -3,11 +3,10 @@
 
 # параметры которые нужно передавать
 #   1. путь у config
-#   2. процент наценки
-#   3. дата начала
-#	  4. дата конца
-#   5. категирия товаров
-#   6. бренд товаров
+#   2. дата начала
+#	  3. дата конца
+#   4. категирия товаров
+#   5. бренд товаров
 
 # считываес параметры с консоля
 args <- commandArgs(trailingOnly = T);
@@ -26,11 +25,10 @@ setwd(myDir);
 
 
 {
-  myProf =as.integer(args[2]);
-  begDate = args[3];
-  endDate = args[4];
-  CategoryID = ifelse(args[5]!="NA", args[5], "*");
-  brand = ifelse(args[6]!="NA", args[6], "*");
+  begDate = args[2];
+  endDate = args[3];
+  CategoryID = ifelse(args[4]!="NA", args[4], "*");
+  brand = ifelse(args[5]!="NA", args[5], "*");
 }# считываем остальные параметры с консоля
 
 # запускаем скрипт с функциями считывания таблиц
@@ -65,19 +63,19 @@ if(checkData(data.publish))
   plotPublishPrice <- function(publish = data.publish, 
                           colHist = myCol,
                           waySave = myRoute,
-                          prof = myProf,
                           size = mySize){
     
-    png(file=paste0(waySave, paste0("plotPublishPrice", ".png")),width = size[1], height = size[2]);
+    png(file=paste0(waySave, "plotPublishPrice.png"),width = size[1], height = size[2]);
     
     
-    data.push_price_hist = hist(log10(publish$price_real+publish$shipping_real),
-                                freq = FALSE,
-                                breaks = myBreaks, 
-                                col = colHist,
-                                labels = TRUE,
-                                main = "Гистограмма цены выставленых товаров",
-                                xlab = "Log10(Price)");
+    hist(log10(publish$price_real+publish$shipping_real),
+         freq = FALSE,
+         breaks = myBreaks, 
+         col = colHist,
+         labels = TRUE,
+         main = "Гистограмма цены выставленых товаров",
+         xlab = "Log10(Price)");
+    
     lines(density(log10(publish$price_real+publish$shipping_real)),
           col="blue",
           lwd=2);

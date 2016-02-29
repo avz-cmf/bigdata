@@ -37,14 +37,14 @@ source("readData.R");
 
 # создаем запрос для publish
 queryPublish = paste("select publish.ItemID, publish.price_real, publish.shipping_real ",
-                    "from ", bdName, ".publish", ", ", bdName, ".products ",
-                    "where publish.ProductID=products.ProductID and products.brand = '", myBrand, "' and products.ebaycategory_id = ", category, 
-                    "and publish.add_date >",begDate, " and publish.add_date < ", endDate, ";", sep = "");
+                     "from ", bdName, ".publish", ", ", bdName, ".products ",
+                     "where publish.ProductID=products.ProductID and products.brand = '", myBrand, "' and products.ebaycategory_id = ", category, 
+                     "and publish.add_date >",begDate, " and publish.add_date < ", endDate, ";", sep = "");
 # запрос для sold
 querySold = paste("select sold.ItemID ",
-                   "from ", bdName, ".sold ",
-                   "where sold.ItemID in (select publish.ItemID from ",bdName, ".publish, ", bdName, ".products where publish.ProductID = products.ProductID and products.brand = '", myBrand,"' and products.ebaycategory_id = ", category, 
-                   "and publish.add_date >",begDate, " and publish.add_date < ", endDate, ");", sep = "");
+                  "from ", bdName, ".sold ",
+                  "where sold.ItemID in (select publish.ItemID from ",bdName, ".publish, ", bdName, ".products where publish.ProductID = products.ProductID and products.brand = '", myBrand,"' and products.ebaycategory_id = ", category, 
+                  "and publish.add_date >",begDate, " and publish.add_date < ", endDate, ");", sep = "");
 
 # считываем таблицу
 data.publish <- readTable(queryPublish);
@@ -67,9 +67,8 @@ if(checkData(data.publish) & checkTable(data.sold))
   myBreaks = seq(0, maxPrice, by = 0.1);
   
   
-  plotSoldPrice <- function(publish = data.publish,
+  plotProbPrice <- function(publish = data.publish,
                             sold = data.sold,
-                            colHist = myCol,
                             waySave = myRoute,
                             size = mySize){
     
@@ -78,26 +77,31 @@ if(checkData(data.publish) & checkTable(data.sold))
                       by.x = "ItemID", 
                       by.y = "ItemID");
     
-    png(file=paste0(waySave, "plotSoldPrice.png"),width = size[1], height = size[2]);
+    sold_hist_count = hist(log10(data.sold_and_price$price_real+data.sold_and_price$shipping_real),
+                           breaks = myBreaks,
+                           plot = F)$counts;
+    
+    publish_hist_count = hist(log10(publish$price_real+publish$shipping_real),
+                              breaks = myBreaks, 
+                              plot = F)$counts;
     
     
-    hist(log10(soldPrice$price_real+soldPrice$shipping_real),
-               freq = FALSE,
-               breaks = myBreaks, 
-               col = colHist,
-               labels = TRUE,
-               main = "Гистограмма цены проданых товаров",
-               xlab = "Log10(Price)");
+    prob_count = sold_hist_count/publish_hist_count[1:length(sold_hist_count)];
     
-    lines(density(log10(publish$price_real+publish$shipping_real)),
-          col="blue",
-          lwd=2);
+    png(file=paste0(waySave,"plotProbPrice.png"),width = size[1], height = size[2]);
+    
+    plot(myBreaks[1:length(prob_count)],
+         prob_count,
+         type = "o", 
+         main = "график вероятности продажи товара с заданой ценой",
+         xlab = "log10(Price)",
+         ylab = "вероятность продажи");
     
     box();
     
-    dev.off(); 
+    dev.off();
     
-    return("plotSoldPrice");
+    return("plotProbPrice");
   }#  функция постороения гистограммы которая возвращает имя 
   
   plotSoldPrice();# вызов функции построения гистограммы
