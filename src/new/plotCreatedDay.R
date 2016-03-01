@@ -10,6 +10,7 @@
 
 createdDay <- function(brand,CategoryID,begDate,endDate)
 {
+  
   # запрос для sold
   querySold = paste("select sold.CreatedDate ",
                     "from ", myDbname, ".sold ",
@@ -22,7 +23,7 @@ createdDay <- function(brand,CategoryID,begDate,endDate)
   if(!checkTable(data.sold))
   {
     return("ERROR");
-  }#  если в таблице не достаточно элементов тогда пишем ERROR
+  }# если в таблице не достаточно элементов тогда пишем ERROR
   
   # если достаточно элементов тогда рисуем гистограмму
   if(checkTable(data.sold))
@@ -33,9 +34,10 @@ createdDay <- function(brand,CategoryID,begDate,endDate)
     
     plotCreatedDay <- function(sold = data.sold){
       
-      res2 = hist(as.numeric(format(strptime(sold$CreatedDate, FormatDate), "%u")),
+      sold_created = as.numeric(format(strptime(sold$CreatedDate, FormatDate), "%u"));
+      res2 = hist(sold_created,
                   breaks = seq(0,7,1),
-                  plot = F)$counts;
+                  plot = F)$counts; 
       
       res = data.frame(res2);
       return(res);

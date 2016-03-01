@@ -10,6 +10,7 @@
 
 createdTime <- function(brand,CategoryID,begDate,endDate)
 {
+  
   # запрос для sold
   querySold = paste("select sold.CreatedDate ",
                     "from ", myDbname, ".sold ",
