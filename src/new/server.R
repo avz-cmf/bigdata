@@ -28,9 +28,17 @@ source("plotPublishPrice.R")
 source("plotSoldPrice.R")
 source("plotProbPrice.R")
 source("plotProfPrice.R")
-
-
-
+source("plotPublishDay.R")
+source("plotSoldDay.R")
+source("plotProbDay.R")
+source("plotCreatedDay.R")
+source("plotPublishTime.R")
+source("plotSoldTime.R")
+source("plotProbTime.R")
+source("plotCreatedTime.R")
+source("tableCategoryID.R")
+source("tableCategoryPrice.R")
+source("tableProduct.R")
 
 # функция которая определят какой скрипт запускать по названию и возвращает нужные данные
 
@@ -51,6 +59,50 @@ getData <- function(name,brand,CategoryID,begDate,endDate)
   if(name == "plotProfPrice")
   {
     return(profPrice(brand,CategoryID,begDate,endDate))
+  }
+  if(name == "plotPublishDay")
+  {
+    return(publishDay(brand,CategoryID,begDate,endDate))
+  }
+  if(name == "plotSoldDay")
+  {
+    return(soldDay(brand,CategoryID,begDate,endDate))
+  }
+  if(name == "plotProbDay")
+  {
+    return(probDay(brand,CategoryID,begDate,endDate))
+  }
+  if(name == "plotCreatedDay")
+  {
+    return(createdDay(brand,CategoryID,begDate,endDate))
+  }
+  if(name == "plotPublishTime")
+  {
+    return(publishTime(brand,CategoryID, begDate, endDate))
+  }
+  if(name == "plotSoldTime")
+  {
+    return(soldTime(brand,CategoryID,begDate,endDate))
+  }
+  if(name == "plotProbTime")
+  {
+    return(probTime(brand,CategoryID,begDate, endDate))
+  }
+  if(name == "plotCreatedTime")
+  {
+    return(createdTime(brand,CategoryID, begDate,endDate))
+  }
+  if(name == "tableCategory")
+  {
+    return(tableCategory(brand,CategoryID, begDate, endDate))
+  }
+  if(name == "tableCategoryPrice")
+  {
+    return(tableCategoryPrice(brand,CategoryID,begDate,endDate))
+  }
+  if(name == "tableProduct")
+  {
+    return(tableProduct(brand,CategoryID,begDate,endDate))
   }
   
 }

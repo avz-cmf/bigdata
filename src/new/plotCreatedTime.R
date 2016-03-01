@@ -1,0 +1,49 @@
+# какие столбцы
+#   sold: CreatedDate
+
+# параметры которые нужно передавать
+#   1. путь у config
+#   2. дата начала
+#	  3. дата конца
+#   4. категирия товаров
+#   5. бренд товаров
+
+createdTime <- function(brand,CategoryID,begDate,endDate)
+{
+  # запрос для sold
+  querySold = paste("select sold.CreatedDate ",
+                    "from ", myDbname, ".sold ",
+                    "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", brand, CategoryID, 
+                    begDate, endDate, ");", sep = "");
+  
+  # считываем таблицу
+  data.sold <- readTable(querySold);
+  
+  if(!checkTable(data.sold))
+  {
+    return("ERROR");
+  }#  если в таблице не достаточно элементов тогда пишем ERROR
+  
+  # если достаточно элементов тогда рисуем гистограмму
+  if(checkTable(data.sold))
+  {
+    # функция обработки таблицы
+    data.sold = change.sold(data.sold);
+    
+    
+    plotCreatedTime <- function(sold = data.sold){
+      
+      created_time = as.numeric(format(strptime(sold$CreatedDate, FormatDate), "%H"));
+      
+      res2 = hist(created_time,
+                  breaks = seq(-1,23,1),
+                  plot = F)$counts;
+      
+      res = data.frame(res2);
+      return(res);
+    }#  функция постороения гистограммы которая возвращает имя 
+    
+    return(plotCreatedTime());# вызов функции построения гистограммы
+    
+  }
+}

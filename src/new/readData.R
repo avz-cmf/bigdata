@@ -49,3 +49,10 @@ change.sold <-function(sold=data.sold){
   
   return(sold);
 }# функция для обработки таблицы sold
+
+
+change.products <-function(products=data.products){
+  names(products)[1] = "ProductID";
+  
+  return(products)
+}# функция для обработки таблицы products
