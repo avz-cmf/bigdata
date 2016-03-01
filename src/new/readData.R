@@ -3,7 +3,6 @@
 #   2. password - пароль к базе
 #   3. host - host базы данных
 #   4. bdName - имя базы данных
-#   5. route - путь куда сохранять картинки
 #   6. myDir - текущая директория
 
 
@@ -14,9 +13,6 @@
   myBDPassword = as.character(config[1,2]);
   myHost = as.character(config[1,3]);
   myDbname = as.character(config[1,4]);
-  myRoute = as.character(config[1,5]);
-  myCol = "red";
-  mySize = c(960, 960);
 }#  считываес параметры с config
 
 

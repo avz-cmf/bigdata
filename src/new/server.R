@@ -1,4 +1,4 @@
-#stopDaemonizedServer(server)
+# stopDaemonizedServer(server)
 
 library(httpuv)
 library(Rook)
@@ -25,8 +25,9 @@ source("readData.R");
 
 # скрипты которые возвращают данные для построения графиков
 source("plotPublishPrice.R")
-
-
+source("plotSoldPrice.R")
+source("plotProbPrice.R")
+source("plotProfPrice.R")
 
 
 
@@ -39,7 +40,18 @@ getData <- function(name,brand,CategoryID,begDate,endDate)
   {
     return(publishPrice(brand,CategoryID,begDate,endDate))
   }
-  
+  if(name == "plotSoldPrice")
+  {
+    return(soldPrice(brand,CategoryID,begDate,endDate))
+  }
+  if(name == "plotProbPrice")
+  {
+    return(probPrice(brand,CategoryID,begDate,endDate))
+  }
+  if(name == "plotProfPrice")
+  {
+    return(profPrice(brand,CategoryID,begDate,endDate))
+  }
   
 }
 

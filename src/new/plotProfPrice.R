@@ -10,32 +10,8 @@
 #   5. категирия товаров
 #   6. бренд товаров
 
-# считываес параметры с консоля
-args <- commandArgs(trailingOnly = T);
-
-# считываем путь у config
-confFile = args[1];
-
-# считываем config
-config <- read.table(paste(confFile,"config.csv",sep = ""), sep = ",",header = T);
-
-# считываем текущую директорию с config
-myDir = as.character(config[1,6]);
-
-# устанавливаем директорию
-setwd(myDir);
-
-
+profPrice <- function(brand,CategoryID,begDate,endDate)
 {
-  myProf =as.integer(args[2]);
-  begDate = ifelse(args[2]!="NA", paste(" and publish.add_date > '", args[2],"'",sep=""),"");
-  endDate = ifelse(args[3]!="NA", paste(" and publish.add_date < '", args[3],"'",sep=""),"");
-  CategoryID = ifelse(args[4]!="NA", paste(" and products.ebaycategory_id = ", args[4], sep = ""), "");
-  brand = ifelse(args[5]!="NA", paste( " and products.brand = ",args[5], sep = ""), "");
-}# считываем остальные параметры с консоля
-
-# запускаем скрипт с функциями считывания таблиц
-source("readData.R");
 
 # создаем запрос для publish
 queryPublish =paste("select publish.ItemID, publish.ProductID, publish.price_real, publish.shipping_real ",
@@ -54,15 +30,15 @@ data.sold <- readTable(querySold);
 
 if(!checkTable(data.publish) || !checkTable(data.sold))
 {
-  print("ERROR");
+  return("ERROR");
 }#  если в таблице не достаточно элементов тогда пишем ERROR
 
 # если достаточно элементов тогда рисуем гистограмму
 if(checkTable(data.publish) & checkTable(data.sold))
 {
   # функция обработки таблицы
-  data.publish = change.publish();
-  data.sold = change.sold();
+  data.publish = change.publish(data.publish);
+  data.sold = change.sold(data.sold);
   
   # созлаем точки на очи X гистограммы
   maxPrice = log10(max(data.publish$price_real+data.publish$shipping_real,na.rm = T))+0.2;
@@ -71,17 +47,14 @@ if(checkTable(data.publish) & checkTable(data.sold))
   
   plotProfPrice <- function(publish = data.publish,
                             sold = data.sold,
-                            colHist = myCol,
-                            waySave = myRoute,
-                            prof = myProf,
-                            size = mySize){
+                            prof = 10){
     
     soldPrice = merge(subset(sold, select = c(ItemID)), 
                       subset(publish, select = c(ItemID, price_real, shipping_real)),
                       by.x = "ItemID", 
                       by.y = "ItemID");
     
-    sold_hist_count = hist(log10(data.sold_and_price$price_real+data.sold_and_price$shipping_real),
+    sold_hist_count = hist(log10(soldPrice$price_real+soldPrice$shipping_real),
                            breaks = myBreaks,
                            plot = F)$counts;
     
@@ -90,27 +63,19 @@ if(checkTable(data.publish) & checkTable(data.sold))
                               plot = F)$counts;
     
     
-    prob_count = sold_hist_count/publish_hist_count[1:length(sold_hist_count)];
+    prob_count = ifelse(publish_hist_count!=0,sold_hist_count/publish_hist_count,0);
     
-    prof = (10^myBreaks[1:length(prob_count)])*myProf/100;
-    
-    png(file=paste0(waySave, "plotProfPrice.png"),width = size[1], height = size[2]);
-    
-    plot(myBreaks[1:length(prof)],
-         prob_count*prof,
-         type = "o",
-         main = "График прибыли относительно цены товара",
-         xlab = "log10(Price)",
-         ylab = "Profit");
+    prof_price = (10^myBreaks)*prof/100;
+    prob_count = c(0,prob_count)
+    res2 = prob_count*prof_price;
 
-    box();
     
-    dev.off();
-    
-    
-    return("plotProfPrice");
+    res = data.frame(res2,myBreaks);
+    return(res);
+
   }#  функция постороения гистограммы которая возвращает имя 
   
-  plotProfPrice();  # вызов функции построения гистограммы
+  return(plotProfPrice());  # вызов функции построения гистограммы
   
+}
 }

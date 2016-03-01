@@ -38,31 +38,14 @@ if(checkTable(data.publish))
   myBreaks = seq(0, maxPrice, by = 0.1);
   
   
-  plotPublishPrice <- function(publish = data.publish, 
-                          colHist = myCol,
-                          waySave = myRoute,
-                          size = mySize){
-    
-    #png(file=paste0(waySave, "plotPublishPrice.png"),width = size[1], height = size[2]);
-    
+  plotPublishPrice <- function(publish = data.publish){
     
     res2 = hist(log10(publish$price_real+publish$shipping_real),
-         freq = FALSE,
          plot = F,
-         breaks = myBreaks, 
-         col = colHist,
-         labels = TRUE,
-         main = "Гистограмма цены выставленых товаров",
-         xlab = "Log10(Price)")$counts;
+         breaks = myBreaks)$counts;
     
-    #lines(density(log10(publish$price_real+publish$shipping_real)),
-    #      col="blue",
-    #      lwd=2);
-    
-    #box();
-    
-    #dev.off(); 
-    res = data.frame(res2)
+    res2 = c(0,res2)
+    res = data.frame(res2,myBreaks);
     return(res);
   }#  функция постороения гистограммы которая возвращает имя 
   
