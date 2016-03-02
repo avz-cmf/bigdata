@@ -57,9 +57,9 @@ probTime <- function(brand,CategoryID,begDate,endDate)
                   breaks = seq(-1, 23, by = 1),
                   plot = F)$counts;
       
-      res2 = sold_time_count/publish_time_count;
-      
-      res = data.frame(res2);
+      y = sold_time_count/publish_time_count;
+      x = seq(0,23,1)
+      res = data.frame(x,y);
       return(res);
     }#  функция постороения гистограммы которая возвращает имя 
     

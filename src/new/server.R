@@ -9,7 +9,7 @@ library(jsonlite)
 args <- commandArgs(trailingOnly = T);
 
 # считываем путь у config
-confFile = args[1];
+confFile = "C:\\Users\\Dima Guk\\Documents\\bigdata\\res\\";
 
 # считываем config
 config <- read.table(paste(confFile,"config.csv",sep = ""), sep = ",",header = T);
@@ -39,6 +39,7 @@ source("plotCreatedTime.R")
 source("tableCategoryID.R")
 source("tableCategoryPrice.R")
 source("tableProduct.R")
+source("plotCreatedTimeWithTZ.R")
 
 # функция которая определят какой скрипт запускать по названию и возвращает нужные данные
 
@@ -104,7 +105,10 @@ getData <- function(name,brand,CategoryID,begDate,endDate)
   {
     return(tableProduct(brand,CategoryID,begDate,endDate))
   }
-  
+  if(name == "plotCreatedTimeWithTZ")
+  {
+    return(createdTimeWithTZ(brand, CategoryID, begDate, endDate));
+  }
 }
 
 
@@ -137,7 +141,7 @@ app <- list(
       headers = list(
         'Content-Type' = 'text/json'
       ),
-      body = paste('<h1>',toJSON(returnData),'</h1>')
+      body = paste(toJSON(returnData))
     )
   }
 )

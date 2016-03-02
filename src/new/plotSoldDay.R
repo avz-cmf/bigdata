@@ -47,11 +47,11 @@ soldDay <- function(brand,CategoryID,begDate,endDate)
                         by.x = "ItemID", 
                         by.y = "ItemID");
       
-      res2 = hist(as.numeric(format(strptime(sold_day$add_date, FormatDate), "%u")),
+      y = hist(as.numeric(format(strptime(sold_day$add_date, FormatDate), "%u")),
                   breaks = seq(0,7,1),
                   plot = F)$counts;
-      
-      res = data.frame(res2);
+      x = seq(1,7,1)
+      res = data.frame(x, y);
       return(res);
     }#  функция постороения гистограммы которая возвращает имя 
     

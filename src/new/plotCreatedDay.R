@@ -35,11 +35,11 @@ createdDay <- function(brand,CategoryID,begDate,endDate)
     plotCreatedDay <- function(sold = data.sold){
       
       sold_created = as.numeric(format(strptime(sold$CreatedDate, FormatDate), "%u"));
-      res2 = hist(sold_created,
+      y = hist(sold_created,
                   breaks = seq(0,7,1),
                   plot = F)$counts; 
-      
-      res = data.frame(res2);
+      x = seq(1,7,1);
+      res = data.frame(x, hight);
       return(res);
     }#  функция постороения гистограммы которая возвращает имя 
     

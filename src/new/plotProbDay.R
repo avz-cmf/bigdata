@@ -56,9 +56,9 @@ probDay <- function(brand,CategoryID,begDate,endDate)
                                breaks = seq(0,7,1),
                                plot = F)$counts;
       
-      res2 = sold_day_count/publish_day_count;
-      
-      res = data.frame(res2);
+      y = sold_day_count/publish_day_count;
+      x=seq(0,7,1)
+      res = data.frame(x,y);
       return(res);
     }#  функция постороения гистограммы которая возвращает имя 
     

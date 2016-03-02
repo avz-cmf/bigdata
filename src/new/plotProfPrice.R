@@ -65,12 +65,13 @@ if(checkTable(data.publish) & checkTable(data.sold))
     
     prob_count = ifelse(publish_hist_count!=0,sold_hist_count/publish_hist_count,0);
     
-    prof_price = (10^myBreaks)*prof/100;
-    prob_count = c(0,prob_count)
-    res2 = prob_count*prof_price;
+    x = seq(0.05, maxPrice+0.1,0.1)[1:(length(myBreaks)-1)]
+    
+    prof_price = (10^x)*prof/100;
+    y = prob_count*prof_price;
 
     
-    res = data.frame(res2,myBreaks);
+    res = data.frame(x,y);
     return(res);
 
   }#  функция постороения гистограммы которая возвращает имя 

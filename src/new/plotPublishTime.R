@@ -37,11 +37,11 @@ publishTime <-function(brand,CategoryID,begDate,endDate)
       
       publish_time = as.numeric(format(strptime(publish$add_date, FormatDate), "%H"));
       
-      res2 = hist(publish_time,
+      y = hist(publish_time,
                   breaks = seq(-1, 23, by = 1),
                   plot = F)$counts;
-      
-      res = data.frame(res2);
+      x = seq(0,23,1)
+      res = data.frame(x,y);
       return(res);
     }#  функция постороения гистограммы которая возвращает имя 
     

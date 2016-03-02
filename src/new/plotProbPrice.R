@@ -61,10 +61,10 @@ if(checkTable(data.publish) & checkTable(data.sold))
                               plot = F)$counts;
     
     
-    res2 = ifelse(publish_hist_count!=0,sold_hist_count/publish_hist_count,0);
+    y = ifelse(publish_hist_count!=0,sold_hist_count/publish_hist_count,0);
+    x = seq(0.05, maxPrice+0.1,0.1)[1:(length(myBreaks)-1)]
     
-    res2 = c(0,res2)
-    res = data.frame(res2,myBreaks);
+    res = data.frame(x, y);
     return(res);
 
   }#  функция постороения гистограммы которая возвращает имя 

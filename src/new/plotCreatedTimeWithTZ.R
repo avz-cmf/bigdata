@@ -8,7 +8,7 @@
 #   4. категирия товаров
 #   5. бренд товаров
 
-createdTime <- function(brand,CategoryID,begDate,endDate)
+createdTimeWithTZ <- function(brand,CategoryID,begDate,endDate)
 {
   
   # запрос для sold
@@ -32,19 +32,32 @@ createdTime <- function(brand,CategoryID,begDate,endDate)
     data.sold = change.sold(data.sold);
     
     
-    plotCreatedTime <- function(sold = data.sold){
+    plotCreatedTimeWithTZ <- function(sold = data.sold){
       
       created_time = as.numeric(format(strptime(sold$CreatedDate, FormatDate), "%H"));
+      
+      sold_state = subset(sold, select = c(ItemID, StateOrProvince));
+      
+      sold_state = transform(sold_state, delTime = 3);
+      
+      sold_state$delTime[sold_state$StateOrProvince %in% c("WA","OR","CA","NV")]=0;
+      
+      sold_state$delTime[sold_state$StateOrProvince %in% c("MT","ID","WY","CO","UT","AZ","NM")]=1;
+      
+      sold_state$delTime[sold_state$StateOrProvince %in% c("ND","MN","SD","IA","WI","IL","NE","KS","MO","OK","AR","TN",
+                                                                           "AL","MS","LA","TX","")]=2;
+      
+      created_time = ifelse(created_time+sold_state>23,created_time+sold_state-24,created_time+sold_state)
       
       y = hist(created_time,
                   breaks = seq(-1,23,1),
                   plot = F)$counts;
       x = seq(0,23,1)
-      res = data.frame(x,y);
+      res = data.frame(x, y);
       return(res);
     }#  функция постороения гистограммы которая возвращает имя 
     
-    return(plotCreatedTime());# вызов функции построения гистограммы
+    return(plotCreatedTimeWithTZs());# вызов функции построения гистограммы
     
   }
 }

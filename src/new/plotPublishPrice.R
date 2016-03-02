@@ -40,12 +40,13 @@ if(checkTable(data.publish))
   
   plotPublishPrice <- function(publish = data.publish){
     
-    res2 = hist(log10(publish$price_real+publish$shipping_real),
+    y = hist(log10(publish$price_real+publish$shipping_real),
          plot = F,
          breaks = myBreaks)$counts;
     
-    res2 = c(0,res2)
-    res = data.frame(res2,myBreaks);
+    x = seq(0.05, maxPrice+0.1,0.1)[1:(length(myBreaks)-1)]
+    
+    res = data.frame(x, y);
     return(res);
   }#  функция постороения гистограммы которая возвращает имя 
   
