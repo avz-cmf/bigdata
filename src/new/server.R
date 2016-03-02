@@ -146,5 +146,15 @@ app <- list(
   }
 )
 
-server <- startDaemonizedServer("0.0.0.0", 9454, app)
+
+server <- startDaemonizedServer("127.0.0.1", 9999, app);
+
+service(timeoutMs = ifelse(interactive(), 100, 1000));
+
+print(server);
+
+while (TRUE) {
+  service()
+  Sys.sleep(0.002)
+}
 
