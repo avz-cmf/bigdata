@@ -97,7 +97,9 @@ tableCategory <- function(brand,CategoryID,begDate, endDate)
     
     table_category = transform(table_category, delta_prof_mounth = new_prof_mounth - prof_mounth);
     
-    return(table_category[1:10,]);
+    table_category = table_category[order(-table_category$delta_prof_mounth),];
+    
+    return(table_category);
   }
  return(tableOfCategory()) 
 }

@@ -67,7 +67,9 @@ tableCategoryPrice <- function(brand,CategoryID,begDate, endDate)
       
       table_category_price = transform(table_category_price, delta_prof_mounth = new_prof_mounth - prof_mounth);
       
-      return(table_category_price[1:10,]);
+      table_category_price = table_category_price[order(-table_category_price$delta_prof_mounth),];
+      
+      return(table_category_price);
       
       }
     return(tableOfCategoryPrice()) 

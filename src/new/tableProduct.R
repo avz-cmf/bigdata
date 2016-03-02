@@ -79,7 +79,7 @@ tableProduct <- function(brand,CategoryID,begDate, endDate)
       
       table_product = table_product[order(-table_product$delta_prof_mounth),];
       
-      return(table_product[1:10,])
+      return(table_product)
     }
     return(tableOfProduct()) 
   }
