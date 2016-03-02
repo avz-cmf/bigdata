@@ -57,7 +57,8 @@ if(checkTable(data.publish) & checkTable(data.sold))
     
     x = seq(0.05, maxPrice+0.1,0.1)[1:(length(myBreaks)-1)]
     
-    res = data.frame(x, y);
+    id = seq(1,length(x),1)
+    res = data.frame(id, x, y);
     return(res);
   }#  функция постороения гистограммы которая возвращает имя 
   

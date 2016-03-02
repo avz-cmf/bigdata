@@ -59,7 +59,8 @@ probTime <- function(brand,CategoryID,begDate,endDate)
       
       y = sold_time_count/publish_time_count;
       x = seq(0,23,1)
-      res = data.frame(x,y);
+      id = seq(1,length(x),1)
+      res = data.frame(id, x, y);
       return(res);
     }#  функция постороения гистограммы которая возвращает имя 
     

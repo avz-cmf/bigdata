@@ -41,7 +41,8 @@ publishDay <-function(brand,CategoryID,begDate,endDate)
                   breaks = seq(0,7,1),
                   plot = F)$counts;
       x = seq(1,7,1)
-      res = data.frame(x,y);
+      id = seq(1,length(x),1)
+      res = data.frame(id, x, y);
       return(res);
     }#  функция постороения гистограммы которая возвращает имя 
     

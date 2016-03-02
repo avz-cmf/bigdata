@@ -1,5 +1,3 @@
-# stopDaemonizedServer(server)
-
 library(httpuv)
 library(Rook)
 library(jsonlite)
@@ -9,7 +7,7 @@ library(jsonlite)
 args <- commandArgs(trailingOnly = T);
 
 # считываем путь у config
-confFile = "C:\\Users\\Dima Guk\\Documents\\bigdata\\res\\";
+confFile = args[1];
 
 # считываем config
 config <- read.table(paste(confFile,"config.csv",sep = ""), sep = ",",header = T);
@@ -147,14 +145,14 @@ app <- list(
 )
 
 
+#server <- startDaemonizedServer("0.0.0.0", 9454, app);
+
 server <- startDaemonizedServer("127.0.0.1", 9999, app);
-
-service(timeoutMs = ifelse(interactive(), 100, 1000));
-
 print(server);
+service(timeoutMs = ifelse(interactive(), 100, 1000));
 
 while (TRUE) {
   service()
   Sys.sleep(0.002)
 }
-
+# stopDaemonizedServer(server)

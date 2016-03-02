@@ -58,7 +58,8 @@ probDay <- function(brand,CategoryID,begDate,endDate)
       
       y = sold_day_count/publish_day_count;
       x=seq(0,7,1)
-      res = data.frame(x,y);
+      id = seq(1,length(x),1)
+      res = data.frame(id, x, y);
       return(res);
     }#  функция постороения гистограммы которая возвращает имя 
     
