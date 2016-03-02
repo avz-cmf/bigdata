@@ -9,7 +9,7 @@ library(jsonlite)
 args <- commandArgs(trailingOnly = T);
 
 # считываем путь у config
-confFile = "C:\\Users\\Dima Guk\\Documents\\bigdata\\res\\";
+confFile = args[1];
 
 # считываем config
 config <- read.table(paste(confFile,"config.csv",sep = ""), sep = ",",header = T);
