@@ -39,20 +39,32 @@ checkTable <- function(data){
 }# функция для проверки наличия нежного количества данных
 
 
-change.publish <-function(publish=data.publish){
+change.publish <-function(publish){
   
   return(publish);
 }# функция для обработки таблицыpublish
 
 
-change.sold <-function(sold=data.sold){
+change.sold <-function(sold){
   
   return(sold);
 }# функция для обработки таблицы sold
 
 
-change.products <-function(products=data.products){
+change.products <-function(products){
   names(products)[1] = "ProductID";
   
   return(products)
 }# функция для обработки таблицы products
+
+
+change.product_vehicle <- function(product_vehicle){
+  
+  return(product_vehicle)
+}# функция для обработки таблицы product_vehicle
+
+
+change.vehicles <- function(vehicles){
+  
+  return(vehicles)
+}# функция для обработки таблицы vehicles

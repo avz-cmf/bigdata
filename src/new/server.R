@@ -7,10 +7,12 @@ library(jsonlite)
 args <- commandArgs(trailingOnly = T);
 
 # считываем путь у config
-confFile = args[1];
+#confFile = args[1];
+
+confFile = "C:\\Users\\Admin\\Documents\\dima_res\\config.csv";
 
 # считываем config
-config <- read.table(paste(confFile,"config.csv",sep = ""), sep = ",",header = T);
+config <- read.table(paste(confFile,"config.csv",sep = ""), sep = ";",header = T);
 
 # считываем текущую директорию с config
 myDir = as.character(config[1,6]);
@@ -38,6 +40,7 @@ source("tableCategoryID.R")
 source("tableCategoryPrice.R")
 source("tableProduct.R")
 source("plotCreatedTimeWithTZ.R")
+source("tableModel.R")
 
 # функция которая определят какой скрипт запускать по названию и возвращает нужные данные
 
@@ -107,6 +110,11 @@ getData <- function(name,brand,CategoryID,begDate,endDate)
   {
     return(createdTimeWithTZ(brand, CategoryID, begDate, endDate));
   }
+  if(name == "tableModel")
+  {
+    return(tableModel())
+  }
+  
 }
 
 
@@ -145,14 +153,14 @@ app <- list(
 )
 
 
-#server <- startDaemonizedServer("0.0.0.0", 9454, app);
+server <- startDaemonizedServer("0.0.0.0", 9454, app);
 
-server <- startDaemonizedServer("127.0.0.1", 9999, app);
-print(server);
-service(timeoutMs = ifelse(interactive(), 100, 1000));
+#server <- startDaemonizedServer("127.0.0.1", 9999, app);
+#print(server);
+#service(timeoutMs = ifelse(interactive(), 100, 1000));
 
-while (TRUE) {
-  service()
-  Sys.sleep(0.002)
-}
+#while (TRUE) {
+#  service()
+#  Sys.sleep(0.002)
+#}
 # stopDaemonizedServer(server)
