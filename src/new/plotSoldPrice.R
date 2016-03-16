@@ -9,18 +9,18 @@
 #   4. категирия товаров
 #   5. бренд товаров
 
-soldPrice <- function(brand,CategoryID,begDate,endDate)
+soldPrice <- function(sql)
 {
 # создаем запрос для publish
 queryPublish =paste("select publish.ItemID, publish.ProductID, publish.price_real, publish.shipping_real ",
                     "from ", myDbname, ".publish", ", ", myDbname, ".products ",
-                    "where publish.ProductID=products.ProductID", brand, CategoryID,begDate, endDate, ";", sep = "");
+                    "where publish.ProductID=products.ProductID", sql, ";", sep = "");
 
 # запрос для sold
 querySold = paste("select sold.ItemID ",
                    "from ", myDbname, ".sold ",
-                   "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", brand, CategoryID, 
-                   begDate, endDate, ");", sep = "");
+                   "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", 
+                    sql, ");", sep = "");
 
 # считываем таблицу
 data.publish <- readTable(queryPublish);

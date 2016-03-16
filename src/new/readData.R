@@ -24,7 +24,7 @@ readTable <- function(query){
                    password = myBDPassword,
                    host = myHost,
                    dbname=myDbname);
-  
+
   res <- data.frame(dbGetQuery(conn = con, statement = query));
   
   q<-dbDisconnect(con);

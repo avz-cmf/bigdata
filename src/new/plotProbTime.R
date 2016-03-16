@@ -9,18 +9,17 @@
 #   4. категирия товаров
 #   5. бренд товаров
 
-probTime <- function(brand,CategoryID,begDate,endDate)
+probTime <- function(sql)
 {
   # создаем запрос для publish
   queryPublish =paste("select publish.ItemID, publish.add_date ",
                       "from ", myDbname, ".publish", ", ", myDbname, ".products ",
-                      "where publish.ProductID=products.ProductID", brand, CategoryID,begDate, endDate, ";", sep = "");
+                      "where publish.ProductID=products.ProductID", sql, ";", sep = "");
   
   # запрос для sold
   querySold = paste("select sold.ItemID ",
                     "from ", myDbname, ".sold ",
-                    "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", brand, CategoryID, 
-                    begDate, endDate, ");", sep = "");
+                    "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", sql, ");", sep = "");
   
   # считываем таблицу
   data.publish <- readTable(queryPublish);

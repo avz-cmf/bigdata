@@ -1,6 +1,6 @@
-logicOperator = "AND|OR"
+logicOperator = "and|or"
 
-scalarOperator = "eq|nq"
+scalarOperator = "eq|nq|le|ge"
 
 resFirst <- function(rql)
 {
@@ -11,19 +11,29 @@ resFirst <- function(rql)
 
 decodRQL <- function(rql)
 {
+  rql = resFirst(rql);
   res = ""
   index = 1;
   log = c("")
-  while(rql != "")
+  name = ""
+  while(nchar(rql)>1)
   {
-    print(rql)
     if(isScalar(rql))
     {
       op = makeScalarQuery(rql)
-      res = paste(res, op, sep = "");
-      rql = substr(rql,nchar(strsplit(rql,"\\)")[[1]][1])+2,100000)
-      if(substr(rql,1,1)==",")
-        res = paste(res, " ", log[index], " ", sep = "")
+      if(substr(op,0,10)=="scriptName")
+      {
+        name = substr(op, 12, 1000000);
+        rql = substr(rql,nchar(strsplit(rql,"\\)")[[1]][1])+2,100000)
+        
+      }
+      else
+      {
+        res = paste(res, op, sep = "");
+        rql = substr(rql,nchar(strsplit(rql,"\\)")[[1]][1])+2,100000)
+        if(substr(rql,1,1)==",")
+          res = paste(res, " ", log[index], " ", sep = "")
+      }
     }
     
     if(isLogic(rql))
@@ -46,8 +56,12 @@ decodRQL <- function(rql)
       res = paste(res, ")", " ", log[index], " ", sep = "")
     }
   }
-    
-  return(substr(res,0,nchar(res)-2))
+  while(substr(res,nchar(res),nchar(res))==" ")  
+    res = substr(res,0,nchar(res)-1)
+  if(!is.na(name))
+    res = c(res, name)
+        
+  return(res)
   
 }
 
@@ -75,7 +89,22 @@ makeScalarQuery <- function(rql)
                 strsplit(buf,",")[[1]][2],
                 sep = "");
   }
-  
+  if(opr=="le")
+  {
+    res = paste(res,
+                strsplit(buf,",")[[1]][1],
+                "<=",
+                strsplit(buf,",")[[1]][2],
+                sep = "");
+  }
+  if(opr=="ge")
+  {
+    res = paste(res,
+                strsplit(buf,",")[[1]][1],
+                ">=",
+                strsplit(buf,",")[[1]][2],
+                sep = "");
+  }
   return(res)
 }
 

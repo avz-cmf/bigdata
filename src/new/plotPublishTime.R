@@ -9,14 +9,14 @@
 #   5. бренд товаров
 
 
-publishTime <-function(brand,CategoryID,begDate,endDate)
+publishTime <-function(sql)
 {
   
   
   # создаем запрос
   queryPublish =paste("select publish.add_date ",
                       "from ", myDbname, ".publish", ", ", myDbname, ".products ",
-                      "where publish.ProductID=products.ProductID", brand, CategoryID,begDate, endDate, ";", sep = "");
+                      "where publish.ProductID=products.ProductID", sql, ";", sep = "");
   
   # считываем таблицу
   data.publish <- readTable(queryPublish);

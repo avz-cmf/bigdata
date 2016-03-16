@@ -8,14 +8,13 @@
 #   4. категирия товаров
 #   5. бренд товаров
 
-createdTimeWithTZ <- function(brand,CategoryID,begDate,endDate)
+createdTimeWithTZ <- function(sql)
 {
   
   # запрос для sold
   querySold = paste("select sold.CreatedDate ",
                     "from ", myDbname, ".sold ",
-                    "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", brand, CategoryID, 
-                    begDate, endDate, ");", sep = "");
+                    "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", sql, ");", sep = "");
   
   # считываем таблицу
   data.sold <- readTable(querySold);
