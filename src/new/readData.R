@@ -19,6 +19,7 @@
 library(RMySQL)
 
 readTable <- function(query){
+  
   con <- dbConnect(MySQL(),
                    user = myBDUser,
                    password = myBDPassword,

@@ -45,6 +45,7 @@ source("decoder.R")
   source("tableProduct.R")
   source("plotCreatedTimeWithTZ.R")
   source("tableModel.R")
+  source("tableProductModel.R")
 }
 
 # функция которая определят какой скрипт запускать по названию и возвращает нужные данные
@@ -119,6 +120,10 @@ getData <- function(name, sql)
   {
     return(tableModel())
   }
+  if(name == "tableProductModel")
+  {
+    return(tableProductModel())
+  }
   
 }
 
@@ -127,20 +132,17 @@ getData <- function(name, sql)
 
 app <- list(
   call = function(req) {
-    wsUrl = paste(sep='',
-                  '"',
-                  "ws://",
-                  ifelse(is.null(req$HTTP_HOST), req$SERVER_NAME, req$HTTP_HOST),
-                  '"')
     rql = req$QUERY_STRING
-    rql = substr(rql,2,100000)
-    query = decodRQL(rql);
-    print(rql)
-    scriptName = query[2];
-    SQL = paste(" and", query[1]);
+    if(rql != "")
+    {  
+      rql = substr(rql,2,100000)
+      query = decodRQL(rql);
+      scriptName = query[2];
+      SQL = paste(" and", query[1]);
+      print(SQL)
     
-    returnData = getData(scriptName, SQL);
-    
+      returnData = getData(scriptName, SQL);
+    }
     list(
       status = 200L,
       headers = list(

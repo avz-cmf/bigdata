@@ -2,29 +2,32 @@
 #   publish:  ItemID ProductID
 #   sold: ItemID
 #   product_vehicle ProductID vehicle_id
-
+#   vehicles id vehicle
 
 tableModel<- function(){
   
-  # создаем запрос для publish
-  queryPublish =paste("select publish.ItemID, publish.ProductID ",
+  # создаем запросы
+  {
+    queryPublish =paste("select publish.ItemID, publish.ProductID ",
                       "from ", myDbname, ".publish;", sep = "");
   
-  # запрос для sold
-  querySold = paste("select sold.ItemID ",
+    querySold = paste("select sold.ItemID ",
                     "from ", myDbname, ".sold ", sep = "");
   
-  queryProductVehicle = paste("select product_vehicle.ProductID, product_vehicle.vehicle_id ",
+    queryProductVehicle = paste("select product_vehicle.ProductID, product_vehicle.vehicle_id ",
                               "from ",myDbname, ".product_vehicle;", sep = "");
   
-  queryVehicles = paste("select vehicles.id, vehicles.vehicle ",
+    queryVehicles = paste("select vehicles.id, vehicles.vehicle ",
                         "from ", myDbname, ".vehicles;", sep = "");
+  }
   
-  # считываем таблицу
-  Publish <- readTable(queryPublish);
-  Sold <- readTable(querySold);
-  Product_vehicle <- readTable(queryProductVehicle);
-  Vehicles <- readTable(queryVehicles)
+  # считываем таблицы
+  {
+    Publish <- readTable(queryPublish);
+    Sold <- readTable(querySold);
+    Product_vehicle <- readTable(queryProductVehicle);
+    Vehicles <- readTable(queryVehicles)
+  }
   
   if(!checkTable(Publish) || !checkTable(Sold) || !checkTable(Product_vehicle) || !checkTable(Vehicles))
   {
@@ -35,10 +38,12 @@ tableModel<- function(){
   if(checkTable(Publish) & checkTable(Sold) & checkTable(Product_vehicle) & checkTable(Vehicles))
   {
     # функция обработки таблицы
-    Publish = change.publish(Publish);
-    Sold = change.sold(Sold);
-    Product_vehicle = change.product_vehicle(Product_vehicle);
-    Vehicles = change.vehicles(Vehicles)
+    {
+      Publish = change.publish(Publish);
+      Sold = change.sold(Sold);
+      Product_vehicle = change.product_vehicle(Product_vehicle);
+      Vehicles = change.vehicles(Vehicles)
+    }
     
     getTable <- function(sold=Sold,
                          publish = Publish,
@@ -65,7 +70,7 @@ tableModel<- function(){
       #считаем количество продаж товаров которые подходят каждой из марок  
       model_sold_count = aggregate(model_sold_count$count_sold,by = list(vehicle_id = model_sold_count$vehicle_id),sum)
       names(model_sold_count)[2] = "count_sold";
-      }
+      }#количество проданых товаров которые подходят заданной модели
       
       {
         #таблица количества выставлений каждого из товаров
@@ -84,25 +89,25 @@ tableModel<- function(){
         model_publish_count = aggregate(model_publish_count$count_publish,by = list(vehicle_id = model_publish_count$vehicle_id),sum)
         names(model_publish_count)[2] = "count_publish";
         
-      }
+      }#количество выставленыз товаров которые подходят заданной модели
       
+      #обьеденяем количество продаж и таблицу с индексацией марок
       res = merge(vehicles,
                   model_sold_count,
                   by.x = "id",
                   by.y = "vehicle_id",
                   all.x = TRUE);
-      
       res$count_sold[is.na(res$count_sold)] = 0
       
+      #добавляем количество вытславленых товаров которые подходят данной модели
       res = merge(res,
                   model_publish_count,
                   by.x = "id",
                   by.y = "vehicle_id",
                   all.x = TRUE);
-      
       res$count_publish[is.na(res$count_publish)] = 0
       
-      return(res[1:10,]); 
+      return(res); 
     }
     
     return(getTable())
