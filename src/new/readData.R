@@ -31,7 +31,7 @@ readTable <- function(query){
   q<-dbDisconnect(con);
   return(res);
   
-}#  функция для считывания таблицы из базы по завросу
+}#  функция для считывания таблицы из базы по запросу
 
 
 checkTable <- function(data){
@@ -53,7 +53,6 @@ change.sold <-function(sold){
 
 
 change.products <-function(products){
-  names(products)[1] = "ProductID";
   
   return(products)
 }# функция для обработки таблицы products

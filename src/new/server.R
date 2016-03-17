@@ -46,6 +46,8 @@ source("decoder.R")
   source("plotCreatedTimeWithTZ.R")
   source("tableModel.R")
   source("tableProductModel.R")
+  source("getBrand.R")
+  source("getCategory.R")
 }
 
 # функция которая определят какой скрипт запускать по названию и возвращает нужные данные
@@ -124,6 +126,14 @@ getData <- function(name, sql)
   {
     return(tableProductModel())
   }
+  if(name == "getBrand")
+  {
+    return(tableBrand())
+  }
+  if(name == "getCategory")
+  {
+    return(tableCategory())
+  }
   
 }
 
@@ -138,8 +148,9 @@ app <- list(
       rql = substr(rql,2,100000)
       query = decodRQL(rql);
       scriptName = query[2];
-      SQL = paste(" and", query[1]);
-      print(SQL)
+      SQL = query[1];
+      if(SQL!="")
+      SQL = paste(" and", SQL);
     
       returnData = getData(scriptName, SQL);
     }
