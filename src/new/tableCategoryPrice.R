@@ -8,7 +8,7 @@ tableCategoryPrice <- function(sql)
   
   
   # создаем запрос
-  queryPublish =paste("select publish.ItemID,publish.ProductID, publish.price_real, publish.shipping_real ",
+  queryPublish =paste("select publish.ItemID, publish.ProductID, publish.price_real, publish.shipping_real ",
                       "from ", myDbname, ".publish", ", ", myDbname, ".products ",
                       "where publish.ProductID=products.ProductID", sql, ";", sep = "");
   
@@ -17,7 +17,6 @@ tableCategoryPrice <- function(sql)
   querySold = paste("select sold.ItemID ",
                     "from ", myDbname, ".sold ",
                     "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", sql, ");", sep = "");
-  
   
   data.publish <- readTable(queryPublish);
   data.sold <- readTable(querySold);
@@ -67,6 +66,8 @@ tableCategoryPrice <- function(sql)
       table_category_price = transform(table_category_price, delta_prof_mounth = new_prof_mounth - prof_mounth);
       
       table_category_price = table_category_price[order(-table_category_price$delta_prof_mounth),];
+      
+      table_category_price = transform(table_category_price, id = 1:nrow(table_category_price))
       
       return(table_category_price);
       

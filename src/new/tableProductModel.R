@@ -127,6 +127,8 @@ tableProductModel<- function(){
       # добавляем вероятность продажи
       res = transform(res, prob = ifelse(count_model_publish!=0,count_model_sold/count_model_publish,0));
       
+      res = transform(res, id = 1:nrow(res))
+      
       return(res);
     }
     

@@ -151,6 +151,7 @@ app <- list(
       SQL = query[1];
       if(SQL!="")
       SQL = paste(" and", SQL);
+      
     
       returnData = getData(scriptName, SQL);
     }

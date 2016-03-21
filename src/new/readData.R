@@ -26,8 +26,9 @@ readTable <- function(query){
                    host = myHost,
                    dbname=myDbname);
 
+
   res <- data.frame(dbGetQuery(conn = con, statement = query));
-  
+
   q<-dbDisconnect(con);
   return(res);
   

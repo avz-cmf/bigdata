@@ -99,13 +99,16 @@ tableModel<- function(){
                   all.x = TRUE);
       res$count_sold[is.na(res$count_sold)] = 0
       
-      #добавляем количество вытславленых товаров которые подходят данной модели
+      #добавляем количество выставленых товаров которые подходят данной модели
       res = merge(res,
                   model_publish_count,
                   by.x = "id",
                   by.y = "vehicle_id",
                   all.x = TRUE);
       res$count_publish[is.na(res$count_publish)] = 0
+      
+      namaes(res)[1] <- "vehicle_id";
+      res = transform(res, id = 1:nrow(res))
       
       return(res); 
     }

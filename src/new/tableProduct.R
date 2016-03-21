@@ -78,6 +78,8 @@ tableProduct <- function(sql)
       
       table_product = table_product[order(-table_product$delta_prof_mounth),];
       
+      table_product = transform(table_product, id = 1:nrow(table_product))
+      
       return(table_product)
     }
     return(tableOfProduct()) 

@@ -98,6 +98,8 @@ tableCategory <- function(sql)
     
     table_category = table_category[order(-table_category$delta_prof_mounth),];
     
+    table_category = transform(table_category, id = nrow(table_category))
+    
     return(table_category);
   }
  return(tableOfCategory()) 

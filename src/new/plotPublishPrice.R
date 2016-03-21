@@ -17,7 +17,7 @@ publishPrice <-function(sql)
 queryPublish =paste("select publish.ProductID, publish.price_real, publish.shipping_real ",
                  "from ", myDbname, ".publish", ", ", myDbname, ".products ",
                  "where publish.ProductID=products.ProductID", sql, ";", sep = "");
-print(queryPublish)
+
 # считываем таблицу
 data.publish <- readTable(queryPublish);
 
