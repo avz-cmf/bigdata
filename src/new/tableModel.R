@@ -107,7 +107,7 @@ tableModel<- function(){
                   all.x = TRUE);
       res$count_publish[is.na(res$count_publish)] = 0
       
-      namaes(res)[1] <- "vehicle_id";
+      names(res)[1] <- "vehicle_id";
       res = transform(res, id = 1:nrow(res))
       res = transform(res,id=1:nrow(res))
       
