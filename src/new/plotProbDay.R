@@ -56,7 +56,7 @@ probDay <- function(sql)
                                plot = F)$counts;
       
       y = sold_day_count/publish_day_count;
-      x=seq(0,7,1)
+      x=seq(1,7,1)
       id = seq(1,length(x),1)
       res = data.frame(id, x, y);
       return(res);
