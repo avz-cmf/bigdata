@@ -1,7 +1,7 @@
 # какие столбцы
 #   product ebaycategory_id category
 
-tableCategory<- function(){
+getCategoryName<- function(){
   
   # создаем запросы
   {

@@ -5,8 +5,6 @@
 
 tableCategory <- function(sql)
 {
-
-  
   # создаем запрос
   queryPublish =paste("select publish.ItemID,publish.ProductID, publish.price_real, publish.shipping_real ",
                       "from ", myDbname, ".publish", ", ", myDbname, ".products ",
@@ -21,7 +19,6 @@ tableCategory <- function(sql)
   # запрос для product
   queryProducts = paste("select ProductID, ebaycategory_id, brand ",
                        "from ", myDbname, ".products;");
-  
   
   data.publish <- readTable(queryPublish);
   data.sold <- readTable(querySold);
@@ -44,7 +41,7 @@ tableCategory <- function(sql)
   tableOfCategory <-function(publish = data.publish, 
                              sold = data.sold,
                              products = data.products,
-                             delta_prob = 1.26){
+                             delta_prob = 1.1674503){
     
     sold_ProductID_price = merge(subset(sold, select = c(ItemID)),
                                  subset(publish, select = c(ItemID, ProductID, price_real, shipping_real)),

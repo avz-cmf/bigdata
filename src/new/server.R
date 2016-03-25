@@ -7,9 +7,9 @@ library(DBI)
 args <- commandArgs(trailingOnly = T);
 
 # считываем путь у config
-#confFile = args[1];
+confFile = args[1];
 
-confFile = "C:\\Users\\Admin\\Documents\\dima_res\\config.csv";
+#confFile = "C:\\Users\\Admin\\Documents\\dima_res\\config.csv";
 
 # считываем config
 config <- read.table(confFile, sep = ";",header = T);
@@ -132,7 +132,7 @@ getData <- function(name, sql)
   }
   if(name == "getCategory")
   {
-    return(tableCategory())
+    return(getCategoryName())
   }
   
 }
@@ -152,7 +152,7 @@ app <- list(
       if(SQL!="")
       SQL = paste(" and", SQL);
       
-    
+
       returnData = getData(scriptName, SQL);
     }
     list(
@@ -166,14 +166,14 @@ app <- list(
 )
 
 
-server <- startDaemonizedServer("0.0.0.0", 9997, app);
+#server <- startDaemonizedServer("0.0.0.0", 9997, app);
 
-#server <- startDaemonizedServer("127.0.0.1", 9999, app);
-#print(server);
-#service(timeoutMs = ifelse(interactive(), 100, 1000));
+server <- startDaemonizedServer("127.0.0.1", 9999, app);
+print(server);
+service(timeoutMs = ifelse(interactive(), 100, 1000));
 
-#while (TRUE) {
-#  service()
-#  Sys.sleep(0.002)
-#}
+while (TRUE) {
+  service()
+  Sys.sleep(0.002)
+}
 # stopDaemonizedServer(server)
