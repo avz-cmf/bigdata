@@ -35,7 +35,7 @@ createdTimeWithTZ <- function(sql)
       
       created_time = as.numeric(format(strptime(sold$CreatedDate, FormatDate), "%H"));
       
-      sold_state = subset(sold, select = c(ItemID, StateOrProvince));
+      sold_state = subset(sold, select = c(StateOrProvince));
       
       sold_state = transform(sold_state, delTime = 3);
       
