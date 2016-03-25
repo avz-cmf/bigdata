@@ -4,7 +4,7 @@ library(DBI)
 
 
 # считываес параметры с консоля
-args <- commandArgs(trailingOnly = T);
+#args <- commandArgs(trailingOnly = T);
 
 # считываем путь у config
 confFile = args[1];
@@ -143,17 +143,25 @@ getData <- function(name, sql)
 app <- list(
   call = function(req) {
     rql = req$QUERY_STRING
+    returnData = "";
+    print("new requesr")
     if(rql != "")
-    {  
+    {
       rql = substr(rql,2,100000)
+      
       query = decodRQL(rql);
       scriptName = query[2];
+      print(scriptName);
       SQL = query[1];
       if(SQL!="")
-      SQL = paste(" and", SQL);
+        SQL = paste(" and", SQL);
+      print(SQL);
       
-
+      
       returnData = getData(scriptName, SQL);
+      print(returnData);
+    }else{
+      print("not query")
     }
     list(
       status = 200L,
