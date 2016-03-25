@@ -12,7 +12,7 @@ createdTimeWithTZ <- function(sql)
 {
   
   # запрос для sold
-  querySold = paste("select sold.CreatedDate ",
+  querySold = paste("select sold.CreatedDate, sold.StateOrProvince ",
                     "from ", myDbname, ".sold ",
                     "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", sql, ");", sep = "");
   
