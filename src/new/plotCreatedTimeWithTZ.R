@@ -57,7 +57,7 @@ createdTimeWithTZ <- function(sql)
       return(res);
     }#  функция постороения гистограммы которая возвращает имя 
     
-    return(plotCreatedTimeWithTZs());# вызов функции построения гистограммы
+    return(plotCreatedTimeWithTZ());# вызов функции построения гистограммы
     
   }
 }
