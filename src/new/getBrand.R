@@ -5,8 +5,8 @@ tableBrand<- function(){
   
   # создаем запросы
   {
-    queryProduct =paste("select analit_products_by_brand_category.brand ",
-                        "from ", myDbname, ".analit_products_by_brand_category;", sep = "");
+    queryProduct =paste("select products.brand ",
+                        "from ", myDbname, ".products;", sep = "");
   }
   
   # считываем таблицы

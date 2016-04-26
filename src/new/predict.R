@@ -13,15 +13,15 @@ FormatDate = "%Y-%m-%d %H:%M";
                    dbname='mototouc_saascom');
   
   
-  sold = data.frame(dbGetQuery(conn = con, statement = 'select * from analit_sold'));
+  sold = data.frame(dbGetQuery(conn = con, statement = 'select * from sold'));
   
-  publish = data.frame(dbGetQuery(conn = con, statement = 'select * from analit_publish'));
+  publish = data.frame(dbGetQuery(conn = con, statement = 'select * from publish'));
   publish = publish[publish$add_date>'2015-06-01',]
   product_vehicle = read.table('C:\\Users\\Admin\\Documents\\dima\\data\\product_vehicle.txt',header = T,sep = '|')
   
-  product = data.frame(dbGetQuery(conn = con, statement = 'select * from analit_products_by_brand_category'));
+  product = data.frame(dbGetQuery(conn = con, statement = 'select * from products'));
   
-  view = data.frame(dbGetQuery(conn = con, statement = 'select * from analit_views'));
+  view = data.frame(dbGetQuery(conn = con, statement = 'select * from views'));
   view = view[view$ViewDate>'2015-06-01',]
 }# скачиваем таблицы
 
@@ -242,7 +242,7 @@ FormatDate = "%Y-%m-%d %H:%M";
 }# создание data.frame для прогнозирования
 
 {
-  include_mounth = c(9,10,11,12,13,14,15)
+  include_mounth = c(15)
   
   for(i in include_mounth)
   {
@@ -279,6 +279,6 @@ FormatDate = "%Y-%m-%d %H:%M";
 }# добавление новых признаков
 
 
-write.csv(X, 'data.csv',row.names = F)
+write.csv(X, 'test.csv',row.names = F)
 
 
