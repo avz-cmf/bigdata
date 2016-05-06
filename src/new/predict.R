@@ -1,3 +1,4 @@
+library(DBI)
 library(RMySQL)
 library(reshape2)
 
@@ -9,20 +10,29 @@ FormatDate = "%Y-%m-%d %H:%M";
   con <- dbConnect(MySQL(),
                    user = 'dima',
                    password = '123qwe321',
-                   host = '192.168.1.103',
+                   host = '192.168.1.104',
                    dbname='mototouc_saascom');
   
+  con2 <- dbConnect(MySQL(),
+                    user = 'dima',
+                    password = '123qwe321',
+                    host = '192.168.1.104',
+                    dbname='mototouc_saasebay');
   
   sold = data.frame(dbGetQuery(conn = con, statement = 'select * from sold'));
   
   publish = data.frame(dbGetQuery(conn = con, statement = 'select * from publish'));
   publish = publish[publish$add_date>'2015-06-01',]
-  product_vehicle = read.table('C:\\Users\\Admin\\Documents\\dima\\data\\product_vehicle.txt',header = T,sep = '|')
+  
+  product_vehicle = data.frame(dbGetQuery(conn = con2, statement = 'select * from product_vehicle'));
+  dbDisconnect(conn = con2);
   
   product = data.frame(dbGetQuery(conn = con, statement = 'select * from products'));
   
   view = data.frame(dbGetQuery(conn = con, statement = 'select * from views'));
   view = view[view$ViewDate>'2015-06-01',]
+  
+  maxMounth = dbGetQuery(conn = con, statement = 'SELECT max(mounth_publish) FROM predictTable')[1,1]
 }# скачиваем таблицы
 
 {
@@ -210,11 +220,10 @@ FormatDate = "%Y-%m-%d %H:%M";
 
 {
   Data = subset(publish, select = c(add_date, ProductID, price_real, shipping_real));
-  Data = transform(Data, day_publish = as.numeric(format(strptime(add_date, FormatDate), "%u")));
-  Data = transform(Data, hour_publish = as.numeric(format(strptime(add_date, FormatDate), "%H")));
+
   Data = transform(Data, mounth_publish = as.numeric(format(strptime(add_date, FormatDate), "%m"))+
                                          (as.numeric(format(strptime(add_date, FormatDate), "%Y"))-2015)*12);
-  Data = subset(Data, select = c(ProductID, price_real, shipping_real, day_publish, hour_publish, mounth_publish));
+  Data = subset(Data, select = c(ProductID, price_real, shipping_real, mounth_publish));
   
   Data = merge(Data,
                count,
@@ -241,44 +250,90 @@ FormatDate = "%Y-%m-%d %H:%M";
   rm(list = c('count','model_sold_count', 'model_publish_count', 'model_view_count', 'prod'))
 }# создание data.frame для прогнозирования
 
-{
-  include_mounth = c(15)
-  
-  for(i in include_mounth)
+k=3
+
+#include_mounth = c(9,10,11,12,13,14)
+include_mounth = sort(unique(Data$mounth_publish)) 
+include_mounth = include_mounth[include_mounth>maxMounth]
+include_mounth = include_mounth[include_mounth<max(include_mounth)-2]
+
+if (length(include_mounth)>0)
+{    
   {
-    buf = subset(Data[Data$mounth_publish==i,], select = c('ProductID', 'price_real', 'shipping_real', 'day_publish',
-                                                        'hour_publish', 'sum_sold_brand', 'mean_sold_brand', 'sum_sold_category',
-                                                        'mean_sold_category', 'count_model_publish', 'count_model', 'count_model_sold',
-                                                        'count_model_view', paste(i-1,'_sold',sep=''),paste(i-2,'_sold',sep=''),
-                                                        paste(i-3,'_sold',sep=''), paste(i-1,'_view',sep=''), paste(i-2,'_view',sep=''),
-                                                        paste(i-3,'_view',sep=''), paste(i-1,'_publish',sep=''),paste(i-2,'_publish',sep=''),
-                                                        paste(i-3,'_publish',sep=''),paste(i,'_sold',sep='')))
+  
+    for(i in include_mounth)
+    {
+      
+      colum = c('ProductID', 'price_real', 'shipping_real', 'mounth_publish', 'sum_sold_brand', 'mean_sold_brand', 'sum_sold_category',
+                'mean_sold_category', 'count_model_publish', 'count_model', 'count_model_sold',
+                'count_model_view')
+      
+      for (j in 1:k)
+      {
+        colum = c(colum, paste(i-j,'_sold',sep=''), paste(i-j,'_publish',sep=''), paste(i-j,'_view',sep=''))
+      }
+      
+      colum = c(colum, paste(i,'_sold',sep=''))
+      
     
-    names(buf) = c('ProductID', 'price_real', 'shipping_real', 'day_publish',
-                   'hour_publish', 'sum_sold_brand', 'mean_sold_brand', 'sum_sold_category',
-                   'mean_sold_category', 'count_model_publish', 'count_model', 'count_model_sold',
-                   'count_model_view','sold1','sold2','sold3','view1','view2','view3','publish1','publish2','publish3','y')
-    if(i==include_mounth[1])
-    {
-      X = buf
+      buf = subset(Data[Data$mounth_publish==i,], select = colum)
+      
+      colum_res = c('ProductID', 'price_real', 'shipping_real', 'mounth_publish', 'sum_sold_brand', 'mean_sold_brand', 'sum_sold_category',
+                    'mean_sold_category', 'count_model_publish', 'count_model', 'count_model_sold',
+                    'count_model_view')
+      
+      for (j in 1:k)
+      {
+        colum_res = c(colum_res, paste('sold', j, sep = ''), paste('publish', j, sep = ''), paste('view', j, sep = ''))
+      }
+      
+      colum_res = c(colum_res, 'y')
+      
+      names(buf) = colum_res
+      
+      if(i==include_mounth[1])
+      {
+        X = buf
+      }
+      if(i!=include_mounth[1])
+      {
+        X = rbind.data.frame(X,buf)
+      }
     }
-    if(i!=include_mounth[1])
+    
+    rm(list = c('buf'))
+  } # преобразование таблицы Data в формат который подходит для прогнозирования
+  
+  {
+    
+    colum_sold = c('sold1')
+    colum_publish = c('publish1')
+    colum_view = c('view1')
+    
+    for(j in 2:k)
     {
-      X = rbind.data.frame(X,buf)
+      colum_sold = c(colum_sold, paste('sold', j, sep = ''))
+      colum_publish = c(colum_publish, paste('publish', j, sep = ''))
+      colum_view = c(colum_view, paste('view', j, sep = ''))
     }
-  }
-}# преобразование таблицы Data в формат который подходит для прогнозирования
-
-{
-  X = transform(X, sold = sold1+sold2+sold3)
-  X = transform(X, publish = publish1+publish2+publish3)
-  X = transform(X, view = view1+view2+view3)
+    
+    X = transform(X, sold = rowSums(X[colum_sold]))
+    X = transform(X, publish = rowSums(X[colum_publish]))
+    X = transform(X, view = rowSums(X[colum_view]))
+    
+    X = transform(X, prob_sold = ifelse(publish!=0,sold/publish,0))
+    
+    X = transform(X, prob_sold_model = ifelse(count_model!=0, count_model_sold/count_model, 0))
+    
+    X = transform(X, prob_view_model = ifelse(count_model!=0, count_model_view/count_model, 0))
+    
+    
+  }# добавление новых признаков
   
-  X = transform(X, prob_sold = ifelse(publish!=0,sold/publish,0))
+  X=X[X$publish1>0 & X$publish2>0 & X$publish3>0,]
+  #write.csv(X, 'Data.csv',row.names = F)
   
-}# добавление новых признаков
-
-
-write.csv(X, 'test.csv',row.names = F)
-
+  
+  dbWriteTable(con, "predictTable", value = X, row.names=0, append = TRUE)
+}
 
