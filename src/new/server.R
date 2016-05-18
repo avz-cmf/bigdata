@@ -48,6 +48,8 @@ source("decoder.R")
   source("tableProductModel.R")
   source("getBrand.R")
   source("getCategory.R")
+  source("bestProducts.R")
+  source("bestCompetitor.R")
 }
 
 # функция которая определят какой скрипт запускать по названию и возвращает нужные данные
@@ -134,7 +136,14 @@ getData <- function(name, sql)
   {
     return(getCategoryName())
   }
-  
+  if(name == "bestProducts")
+  {
+    return(getBestProduct())
+  }
+  if(name == "bestCompetitor")
+  {
+    return(getBestSeller())
+  }
 }
 
 

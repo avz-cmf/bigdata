@@ -12,62 +12,78 @@ FormatDate = "%Y-%m-%d %H:%M";
                    user = 'dima',
                    password = '123qwe321',
                    host = '192.168.1.104',
-                   dbname='mototouc_saascom');
+                   dbname = 'mototouc_saascom');
   
   # подключаемся к базе в которой лежит таблица product_vehicle
   con2 <- dbConnect(MySQL(),
                     user = 'dima',
                     password = '123qwe321',
                     host = '192.168.1.104',
-                    dbname='mototouc_saasebay');
+                    dbname = 'mototouc_saasebay');
   
   # скачиваем таблицу sold
-  sold = data.frame(dbGetQuery(conn = con, statement = 'select * from sold'));
+  sold = data.frame(dbGetQuery(conn = con, 
+                               statement = 'select * from sold'));
   
   # скачиваем таблицу publish
-  publish = data.frame(dbGetQuery(conn = con, statement = 'select * from publish'));
-  publish = publish[publish$add_date>'2015-06-01',]
+  publish = data.frame(dbGetQuery(conn = con, 
+                                  statement = 'select * from publish'));
+  publish = publish[publish$add_date > '2015-06-01', ]
   
   # скачиваем таблицу product_vehicle и отключаемся от базы
-  product_vehicle = data.frame(dbGetQuery(conn = con2, statement = 'select * from product_vehicle'));
-  dbDisconnect(conn = con2);
+  product_vehicle = data.frame(dbGetQuery(conn = con2, 
+                                          statement = 'select * from product_vehicle'));
+  q <- dbDisconnect(conn = con2);
   
   # скачиваем таблицу products 
-  product = data.frame(dbGetQuery(conn = con, statement = 'select * from products'));
+  product = data.frame(dbGetQuery(conn = con, 
+                                  statement = 'select * from products'));
   
   # скачиваем таблицу view
-  view = data.frame(dbGetQuery(conn = con, statement = 'select * from views'));
-  view = view[view$ViewDate>'2015-06-01',]
+  view = data.frame(dbGetQuery(conn = con, 
+                               statement = 'select * from views'));
+  view = view[view$ViewDate > '2015-06-01', ]
   
   # находим максимальный месяц товаров которые есть в таблице для прогнозирования
-  maxMounth = dbGetQuery(conn = con, statement = 'SELECT max(mounth_publish) FROM predictTable')[1,1]
+  maxMounth = dbGetQuery(conn = con, 
+                         statement = 'SELECT max(mounth_publish) FROM predictTable')[1,1]
 }# скачиваем таблицы
 
 {
   # оставляем в таблице view только столбцы ItemID, ViewDate
-  view = subset(view, select = c(ItemID, ViewDate))
+  view = subset(view, 
+                select = c(ItemID, ViewDate))
+  
   # добавляем столбец который сотвествует месяцу посмотра начиная с 2015 года
-  view = transform(view, mounth_view = paste(as.numeric(format(strptime(ViewDate, FormatDate), "%m"))+
+  view = transform(view, 
+                   mounth_view = paste(as.numeric(format(strptime(ViewDate, FormatDate), "%m"))+
                                        (as.numeric(format(strptime(ViewDate, FormatDate), "%Y"))-2015)*12, '_view' ,sep=''))
+  
   # добавляем столбец который соотвествует ProductID товара который просматрели
   view = merge(view,
                subset(publish, select = c(ItemID, ProductID)),
                by = "ItemID")
+  
   # создаем таблицу частот с количеством просмотров каждого из товаров в каждий из месяцов
-  count_view = data.frame(table(view$ProductID, view$mounth_view))
+  count_view = data.frame(table(view$ProductID, 
+                                view$mounth_view))
   names(count_view) = c("ProductID", "mounth_view", "count_view")
   
   # используя библиотеку reshape2 преобразовываем таблицу смежности в нужный нам формат
-  count_view = dcast(count_view,ProductID~mounth_view, value.var = 'count_view')
+  count_view = dcast(count_view,
+                     ProductID~mounth_view, 
+                     value.var = 'count_view')
 
 }# создание таблицы count_view_mounth
 
 {
   # оставляем в таблице sold только столбцы ItemID, CreatedDate
-  sold = subset(sold, select = c(ItemID, CreatedDate))
+  sold = subset(sold, 
+                select = c(ItemID, CreatedDate))
   
   # добавляем столбец из одиниц 
-  sold = transform(sold, sold = 1)
+  sold = transform(sold, 
+                   sold = 1)
   
   # добавляем ProductID обьеденяя с таблицей publish
   sold = merge(sold,
@@ -75,40 +91,53 @@ FormatDate = "%Y-%m-%d %H:%M";
                by = "ItemID")
   
   # добавляем столбец который соотвествует месяцу продажи начиная с 2015
-  sold = transform(sold, mounth_sold = paste(as.numeric(format(strptime(CreatedDate, FormatDate), "%m"))+
+  sold = transform(sold, 
+                   mounth_sold = paste(as.numeric(format(strptime(CreatedDate, FormatDate), "%m"))+
                                        (as.numeric(format(strptime(CreatedDate, FormatDate), "%Y"))-2015)*12, '_sold' ,sep=''));
   
   # создаем таблицу частот для каждого товара и месяца
-  count_sold = data.frame(table(sold$ProductID, sold$mounth_sold))
+  count_sold = data.frame(table(sold$ProductID, 
+                                sold$mounth_sold))
   names(count_sold) = c("ProductID", "mounth_sold", "count_sold")
   
   # преобразуес таблицу в нужный формат
-  count_sold = dcast(count_sold,ProductID~mounth_sold, value.var = 'count_sold')
+  count_sold = dcast(count_sold,
+                     ProductID~mounth_sold, 
+                     value.var = 'count_sold')
   
 }# создание таблицы count_sold_mounth
 
 {
   #  оставляем в таблице publish только столбцы add_date, ProductID, price_real, shipping_real, ItemID
-  publish = subset(publish, select = c(add_date, ProductID, price_real, shipping_real,ItemID))
+  publish = subset(publish, 
+                   select = c(add_date, ProductID, price_real, shipping_real, ItemID))
   
   # добавляес столбец который соотвествует месяцу выставления товара начиная с 2015
-  publish = transform(publish, mounth_publish = paste(as.numeric(format(strptime(add_date, FormatDate), "%m"))+
+  publish = transform(publish, 
+                      mounth_publish = paste(as.numeric(format(strptime(add_date, FormatDate), "%m"))+
                                                 (as.numeric(format(strptime(add_date, FormatDate), "%Y"))-2015)*12, '_publish' ,sep=''));
   # создаем таблицу частот для каждого товара и для каждого месяца
-  count_publish = data.frame(table(publish$ProductID,publish$mounth_publish))
+  count_publish = data.frame(table(publish$ProductID,
+                                   publish$mounth_publish))
   names(count_publish) = c("ProductID", "mounth_publish", "count_publish")
   
   # преобразовываем нашу таблицу в нужный формат
-  count_publish = dcast(count_publish,ProductID~mounth_publish, value.var = 'count_publish')
+  count_publish = dcast(count_publish,
+                        ProductID~mounth_publish, 
+                        value.var = 'count_publish')
   
 }# создание таблицы count_publish_mounth
 
 {
   # обьеденяем таблицу count_publish и count_sold
-  count = merge.data.frame(count_publish,count_sold,all.x = T)
+  count = merge.data.frame(count_publish,
+                           count_sold,
+                           all.x = T)
   
   # также добавляем таблицу count_view
-  count =merge.data.frame(count, count_view, all.x = T)
+  count = merge.data.frame(count, 
+                           count_view, 
+                           all.x = T)
   count[is.na(count)]=0
   
   # удаляес талицы count_publish, count_sold, count_view
@@ -129,19 +158,27 @@ FormatDate = "%Y-%m-%d %H:%M";
   prod$count_sold[is.na(prod$count_sold)]=0
   
   # создаем таблицу brand_mean в которой для каждой категории будет записана среднее количество проданого товара доного бренда
-  brand_mean = aggregate(prod$count_sold, by = list(brand = prod$brand),mean)
+  brand_mean = aggregate(prod$count_sold, 
+                         by = list(brand = prod$brand),
+                         mean)
   names(brand_mean)[2] = "mean_sold_brand"
   
   # создаем таблицу с сумарным количество проданых товаров каждого бренда
-  brand_sum = aggregate(prod$count_sold, by = list(brand = prod$brand), sum)
+  brand_sum = aggregate(prod$count_sold, 
+                        by = list(brand = prod$brand), 
+                        sum)
   names(brand_sum)[2] = "sum_sold_brand" 
   
   # создаем таблицу с средним количеством продаж товара из каждой категории
-  category_mean = aggregate(prod$count_sold, by = list(category = prod$ebaycategory_id),mean)
+  category_mean = aggregate(prod$count_sold, 
+                            by = list(category = prod$ebaycategory_id),
+                            mean)
   names(category_mean)[2] = "mean_sold_category"
   
   # создаем таблицу с сумарным количеством продаж товаров из каждой категории
-  category_sum = aggregate(prod$count_sold, by = list(category = prod$ebaycategory_id), sum)
+  category_sum = aggregate(prod$count_sold,
+                           by = list(category = prod$ebaycategory_id),
+                           sum)
   names(category_sum)[2] = "sum_sold_category" 
   
   # обьеденяем таблицу всех продуктов и сумарного количества продаж товаров бренда
@@ -277,13 +314,16 @@ FormatDate = "%Y-%m-%d %H:%M";
 
 {
   # создаем таблицу с столбцами  add_data, ProductID, price_real, shipping_real
-  Data = subset(publish, select = c(add_date, ProductID, price_real, shipping_real));
+  Data = subset(publish, 
+                select = c(add_date, ProductID, price_real, shipping_real));
   
   # добавляем в таблицу столбец месяц выставления начиная с 2015
-  Data = transform(Data, mounth_publish = as.numeric(format(strptime(add_date, FormatDate), "%m"))+
+  Data = transform(Data, 
+                   mounth_publish = as.numeric(format(strptime(add_date, FormatDate), "%m"))+
                                          (as.numeric(format(strptime(add_date, FormatDate), "%Y"))-2015)*12);
   # убираем с таблицы столбец add_date
-  Data = subset(Data, select = c(ProductID, price_real, shipping_real, mounth_publish));
+  Data = subset(Data, 
+                select = c(ProductID, price_real, shipping_real, mounth_publish));
   
   # обьеженяем нашу таблицу с таблицей количества продаж выставлений просмотров за каджый месяц
   Data = merge(Data,
@@ -419,3 +459,4 @@ if (length(include_mounth)>0)
 
 # выходим из базы
 dbDisconnect(conn = con)
+
