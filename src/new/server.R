@@ -4,7 +4,7 @@ library(DBI)
 
 
 # считываес параметры с консоля
-#args <- commandArgs(trailingOnly = T);
+args <- commandArgs(trailingOnly = T);
 
 # считываем путь у config
 confFile = args[1];
