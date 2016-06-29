@@ -20,6 +20,10 @@ library(RMySQL)
 
 readTable <- function(query){
   
+  query = sub('brand', 'products.brand', query)
+  query = sub('ebaycategory_id', 'products.ebaycategory_id', query)
+  
+  
   con <- dbConnect(MySQL(),
                    user = myBDUser,
                    password = myBDPassword,
