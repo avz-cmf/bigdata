@@ -50,6 +50,7 @@ source("decoder.R")
   source("getCategory.R")
   source("bestProducts.R")
   source("bestCompetitor.R")
+  source("NN.R")
 }
 
 # функция которая определят какой скрипт запускать по названию и возвращает нужные данные
@@ -143,6 +144,10 @@ getData <- function(name, sql)
   if(name == "bestCompetitor")
   {
     return(getBestSeller())
+  }
+  if(name == "countSoldProduct")
+  {
+    return(plotNN(sql));
   }
 }
 

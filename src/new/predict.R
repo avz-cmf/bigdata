@@ -12,14 +12,7 @@ FormatDate = "%Y-%m-%d %H:%M";
                    user = 'dima',
                    password = '123qwe321',
                    host = '192.168.1.104',
-                   dbname = 'mototouc_saascom');
-  
-  # подключаемся к базе в которой лежит таблица product_vehicle
-  con2 <- dbConnect(MySQL(),
-                    user = 'dima',
-                    password = '123qwe321',
-                    host = '192.168.1.104',
-                    dbname = 'mototouc_saasebay');
+                   dbname = 'dima_db');
   
   # скачиваем таблицу sold
   sold = data.frame(dbGetQuery(conn = con, 
@@ -31,9 +24,8 @@ FormatDate = "%Y-%m-%d %H:%M";
   publish = publish[publish$add_date > '2015-06-01', ]
   
   # скачиваем таблицу product_vehicle и отключаемся от базы
-  product_vehicle = data.frame(dbGetQuery(conn = con2, 
+  product_vehicle = data.frame(dbGetQuery(conn = con, 
                                           statement = 'select * from product_vehicle'));
-  q <- dbDisconnect(conn = con2);
   
   # скачиваем таблицу products 
   product = data.frame(dbGetQuery(conn = con, 

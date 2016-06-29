@@ -2,7 +2,7 @@
 logicOperator = "and|or"
 
 #список скалярных операций
-scalarOperator = "eq|nq|le|ge"
+scalarOperator = "eq|nq|le|ge|like"
 
 #функция которая возвращает первую часть RQL запроса
 resFirst <- function(rql)
@@ -73,7 +73,7 @@ decodRQL <- function(rql)
     }
   }
   
-  #пока последний пробул тогда удаляем его
+  #пока последний пробел тогда удаляем его
   while(substr(res,nchar(res),nchar(res))==" ")  
     res = substr(res,0,nchar(res)-1)
   
@@ -136,6 +136,27 @@ makeScalarQuery <- function(rql)
                 ">=","'",
                 strsplit(buf,",")[[1]][2],"'",
                 sep = "");
+  }
+  if(opr=="like")
+  {
+    fun = strsplit(buf,",")[[1]][1]
+    par = strsplit(buf,",")[[1]][2]
+    if (par[1]=='!')
+    {
+      res = paste(res,
+                  fun,
+                  "not like","'",
+                  par[2:end],"'",
+                  sep = "")
+    }
+    else
+    {
+      res = paste(res,
+                  fun,
+                  "like","'",
+                  par[2:end],"'",
+                  sep = "")
+    }
   }
   return(res)
 }

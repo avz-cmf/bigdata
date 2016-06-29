@@ -3,6 +3,10 @@
 
 getBestProduct<-function()
 {
+  
+  # проверят есть ли новые данные сохраняя id последнего спарсеного товара
+  # 
+  
   {
     queryProduct =paste("select * ",
                            "from ", myDbname, ".best_product;", sep = "");
