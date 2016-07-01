@@ -17,18 +17,16 @@ plotNN <- function(sql)
   NN <-function(data = parse)
   {
     
-    parse = data.frame(sold =c(1,2,3), price =c(2,3,4), shipping = c(1,1,1))
-    
     sold = c()
     
-    for (i in 1:(length(parse)))
+    for (i in 1:(length(data)))
     {
   
-      if (parse$sold[i]!=0)
+      if (data$sold[i]!=0)
       {
-        for (j in 1:(parse$sold[i]))
+        for (j in 1:(data$sold[i]))
         {
-          sold = c(sold, parse$price[i]+parse$shipping[i])
+          sold = c(sold, data$price[i]+data$shipping[i])
         }
       }
     }
