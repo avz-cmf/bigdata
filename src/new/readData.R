@@ -21,7 +21,7 @@ library(RMySQL)
 readTable <- function(query){
   
   query = sub('brand', 'products.brand', query)
-  query = sub('ebaycategory_id', 'products.ebaycategory_id', query)
+  query = sub('ebaycategory_id', 'products.category_id_path', query)
   
   
   con <- dbConnect(MySQL(),
