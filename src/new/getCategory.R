@@ -5,7 +5,7 @@ getCategoryName<- function(){
   
   # создаем запросы
   {
-    queryProduct =paste("select products.ebaycategory_id, products.category ",
+    queryProduct =paste("select ebaycategory_id, products.category ",
                         "from ", myDbname, ".products;", sep = "");
   }
   

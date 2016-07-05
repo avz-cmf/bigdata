@@ -5,7 +5,7 @@ tableBrand<- function(){
   
   # создаем запросы
   {
-    queryProduct =paste("select products.brand ",
+    queryProduct =paste("select brand ",
                         "from ", myDbname, ".products;", sep = "");
   }
   
