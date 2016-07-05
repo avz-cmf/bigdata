@@ -1,7 +1,7 @@
 #   myParse:  price, title, start_time
 
 
-plotNN <- function(sql)
+plotNNSold <- function(sql)
 {
   
   # создаем запрос
