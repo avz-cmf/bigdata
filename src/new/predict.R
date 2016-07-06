@@ -356,7 +356,7 @@ k=3
 # список номеров месяцов которые нужно включать в данные которые нужно добавить в базу 
 include_mounth = sort(unique(Data$mounth_publish)) 
 include_mounth = include_mounth[include_mounth>maxMounth]
-include_mounth = include_mounth[include_mounth<max(include_mounth)-2]
+include_mounth = include_mounth[include_mounth<=max(include_mounth)-1]
 
 # если есть данные которые нужно добавить в таблицу
 if (length(include_mounth)>0)

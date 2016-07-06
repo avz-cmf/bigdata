@@ -32,7 +32,7 @@ getCategoryName<- function(){
     }
     getCategory <- function(Product = product)
     {
-      res = data.frame(aggregate(Product,by = list(Product$ebaycategory_id), myFun))
+      res = data.frame(aggregate(Product,by = list(Product$category_id_path), myFun))
       
       res = data.frame(id = 1:nrow(res), res[c("category","ebaycategory_id")]);
       
