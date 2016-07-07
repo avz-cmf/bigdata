@@ -5,8 +5,7 @@ getCategoryName<- function(){
   
   # создаем запросы
   {
-    queryProduct =paste("select ebaycategory_id, products.category ",
-                        "from ", myDbname, ".products;", sep = "");
+    queryProduct ="SELECT category.id, category.name, category.parentID FROM dima_db.products, dima_db.category Where products.category_id_path like concat('%', category.id, '%') GROUP BY category.id;"
   }
   
   # считываем таблицы
@@ -32,9 +31,9 @@ getCategoryName<- function(){
     }
     getCategory <- function(Product = product)
     {
-      res = data.frame(aggregate(Product,by = list(Product$category_id_path), myFun))
+      res = Product
       
-      res = data.frame(id = 1:nrow(res), res[c("category","category_id_path")]);
+      res = data.frame(id = 1:nrow(res), res[c("name","id")]);
       
       names(res) = c("id", "name", "value");
       
