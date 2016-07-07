@@ -18,12 +18,33 @@
 
 library(RMySQL)
 
+changeQuery <- function(query)
+{
+  query = gsub('\\?', 'ZZ123', query)
+  query = gsub('\\*', 'ZZ124', query)
+  
+  query = URLdecode(query)
+  
+  query = gsub('([[:punct:]])', '\\\\ \\1', query)
+  
+  query = gsub('\\ ', '\\', query)
+  
+  
+  query = gsub('ZZ123', '_', query)
+  query = gsub('ZZ124', '%', query)
+  
+  return(query)
+}
+
 readTable <- function(query){
   
   query = sub('brand', 'products.brand', query)
   query = sub('ebaycategory_id', 'products.category_id_path', query)
   
-  query = URLdecode(query)
+  query = changeQuery(query)
+  
+  sub('\\?', 'ZZ_123', query)
+  sub('\\*', 'ZZ_124', query)
   
   con <- dbConnect(MySQL(),
                    user = myBDUser,
