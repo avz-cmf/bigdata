@@ -141,20 +141,20 @@ makeScalarQuery <- function(rql)
   {
     fun = strsplit(buf,",")[[1]][1]
     par = strsplit(buf,",")[[1]][2]
-    if (par[1]=='!')
+    if (substr(par,1,1)=='!')
     {
       res = paste(res,
                   fun,
-                  "not like","'",
-                  par[2:end],"'",
+                  " not like ","'",
+                  substr(par,2,1000000),"'",
                   sep = "")
     }
     else
     {
       res = paste(res,
                   fun,
-                  "like","'",
-                  par[2:end],"'",
+                  " like ","'",
+                  par,"'",
                   sep = "")
     }
   }
