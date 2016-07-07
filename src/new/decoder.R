@@ -146,7 +146,7 @@ makeScalarQuery <- function(rql)
       res = paste(res,
                   fun,
                   " not like ","'",
-                  substr(par,2,1000000),"'",
+                  changeQuery(substr(par,2,1000000)),"'",
                   sep = "")
     }
     else
@@ -154,7 +154,7 @@ makeScalarQuery <- function(rql)
       res = paste(res,
                   fun,
                   " like ","'",
-                  par,"'",
+                  changeQuery(par),"'",
                   sep = "")
     }
   }
@@ -171,4 +171,22 @@ isLogic <- function(opr)
 isScalar <- function(opr)
 {
   return(regexpr(scalarOperator, opr)==1) 
+}
+
+changeQuery <- function(query)
+{
+  query = gsub('\\?', 'ZZ123', query)
+  query = gsub('\\*', 'ZZ124', query)
+  
+  query = URLdecode(query)
+  
+  query = gsub('([[:punct:]])', '\\\\ \\1', query)
+  
+  query = gsub('\\ ', '\\', query)
+  
+  
+  query = gsub('ZZ123', '_', query)
+  query = gsub('ZZ124', '%', query)
+  
+  return(query)
 }
