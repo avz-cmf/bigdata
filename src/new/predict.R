@@ -10,8 +10,8 @@ FormatDate = "%Y-%m-%d %H:%M";
   # покдлючаемся к базе в которой лежат таблицы sold, publish, products, views
   con <- dbConnect(MySQL(),
                    user = 'dima',
-                   password = '123qwe321',
-                   host = '192.168.1.104',
+                   password = '5nfUNO732',
+                   host = '185.128.234.3',
                    dbname = 'dima_db');
   
   # скачиваем таблицу sold
