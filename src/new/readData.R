@@ -19,7 +19,7 @@
 library(RMySQL)
 
 
-readTable <- function(query){
+readTable <- function(query, name = myDbname){
   
   query = sub('brand', 'products.brand', query)
   query = sub('ebaycategory_id', 'products.category_id_path', query)
@@ -29,7 +29,7 @@ readTable <- function(query){
                    user = myBDUser,
                    password = myBDPassword,
                    host = myHost,
-                   dbname=myDbname);
+                   dbname=name);
 
 
   res <- data.frame(dbGetQuery(conn = con, statement = query));
