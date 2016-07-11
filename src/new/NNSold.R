@@ -14,7 +14,7 @@ plotNNSold <- function(sql)
   maxPrice = log10(max(parse$price+parse$shipping,na.rm = T))+0.2;
   myBreaks = seq(0, maxPrice, by = 0.1);
   
-  NN <-function(data = parse)
+  NNSold <-function(data = parse)
   {
     
     sold = c()
@@ -44,5 +44,5 @@ plotNNSold <- function(sql)
     return(res)
   }
   
-  return(tablePublish()) 
+  return(NNSold()) 
 }
