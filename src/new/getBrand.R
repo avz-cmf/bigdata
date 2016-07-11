@@ -35,7 +35,9 @@ tableBrand<- function(){
       
       names(res) = c("id", "name", "value");
       
-      res = rbind(res, c(nrow(res)+1, 'All Brands', ''))
+      all = data.frame(id = nrow(res)+1, name = 'All Brands', value = '')
+      
+      res = rbind(res, all)
       
       return(res)
     }
