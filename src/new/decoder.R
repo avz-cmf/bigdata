@@ -79,7 +79,11 @@ decodRQL <- function(rql)
   
   #дописываем в конец name
   res = c(res, name)
-        
+  print(substr(res[1], nchar(res[1])-3, 100000000))
+  if(substr(res[1], nchar(res[1])-3, 100000000) == ' and')
+  {
+    res[1] = paste(substr(res[1],0,nchar(res[1])-4),')')
+  }
   return(res)
   
 }
