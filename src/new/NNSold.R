@@ -5,14 +5,14 @@ plotNNSold <- function(sql)
 {
   
   # создаем запрос
-  queryData = paste("select price, sold, shipping",
-                    "from ", myDbname, ".myParse",
-                    "where ", sql, ";", sep = "");
+  queryData = paste("select price, sold, shipping ",
+                    "from ", myDbname, ".myParse ",
+                    "where ind = 1 ", sql, ";", sep = "");
   
-  parse <- readTable(queryData);
+  parse <- readTable(queryData, 'dima_parser');
   
   maxPrice = log10(max(parse$price+parse$shipping,na.rm = T))+0.2;
-  myBreaks = seq(0, maxPrice, by = 0.1);
+  myBreaks = seq(-0.1, maxPrice, by = 0.1);
   
   NNSold <-function(data = parse)
   {

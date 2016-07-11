@@ -1,19 +1,18 @@
-#   myParse:  price, title, start_time
+#   myParse:  price, title
 
 
 plotNN <- function(sql)
 {
-
   # создаем запрос
-  queryData = paste("select price, title, start_time",
-                    "from ", myDbname, ".myParse",
-                    "where ", sql, ";", sep = "");
-  
+  queryData = paste("select price, title, shipping ",
+                    "from ", myDbname, ".myParse ",
+                    "where ind = 1 ", sql, ";", sep = "");
+
   parse <- readTable(queryData, 'dima_parser');
-  print(nrow(parse))
   
-  maxPrice = log10(max(parse$price+parse$shipping,na.rm = T))+0.2;
-  myBreaks = seq(0, maxPrice, by = 0.1);
+  maxPrice = log10(max(parse$price+parse$shipping, na.rm = T))+0.3;
+  
+  myBreaks = seq(-0.1, maxPrice, by = 0.1);
   
   NN <-function(data = parse)
   {
