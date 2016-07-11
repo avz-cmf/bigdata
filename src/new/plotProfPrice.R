@@ -29,7 +29,7 @@ data.sold <- readTable(querySold);
 
 if(!checkTable(data.publish) || !checkTable(data.sold))
 {
-  return("ERROR");
+  return(NULL);
 }#  если в таблице не достаточно элементов тогда пишем ERROR
 
 # если достаточно элементов тогда рисуем гистограмму

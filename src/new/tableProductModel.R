@@ -31,7 +31,7 @@ tableProductModel<- function(){
   
   if(!checkTable(Publish) || !checkTable(Sold) || !checkTable(Product_vehicle) || !checkTable(Vehicles))
   {
-    return("ERROR");
+    return(NULL);
   }#  если в таблице не достаточно элементов тогда пишем ERROR
   
   # если достаточно элементов тогда выполняем скрипт дальше

@@ -15,7 +15,7 @@ getCategoryName<- function(){
   
   if(!checkTable(product))
   {
-    return("ERROR");
+    return(NULL);
   }#  если в таблице не достаточно элементов тогда пишем ERROR
   
   # если достаточно элементов тогда выполняем скрипт дальше
