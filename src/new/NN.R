@@ -10,6 +10,7 @@ plotNN <- function(sql)
                     "where ", sql, ";", sep = "");
   
   parse <- readTable(queryData, 'dima_parser');
+  print(nrow(parse))
   
   maxPrice = log10(max(parse$price+parse$shipping,na.rm = T))+0.2;
   myBreaks = seq(0, maxPrice, by = 0.1);
@@ -30,5 +31,5 @@ plotNN <- function(sql)
     return(res)
   }
   
-  return(tablePublish()) 
+  return(NN()) 
 }
