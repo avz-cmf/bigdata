@@ -52,6 +52,8 @@ source("decoder.R")
   source("bestCompetitor.R")
   source("NN.R")
   source("NNSold.R")
+  source('soldProducts.R')
+  source('tablePublishTime.R')
 }
 
 # функция которая определят какой скрипт запускать по названию и возвращает нужные данные
@@ -154,6 +156,15 @@ getData <- function(name, sql)
   {
     return(plotNNold(sql));
   }
+  if(name == 'soldProducts')
+  {
+    return(soldProducts(sql))
+  }
+  if(name == 'tablePublishTime')
+  {
+    return(tablePublishTime())
+  }
+  
 }
 
 
