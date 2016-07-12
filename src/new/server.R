@@ -148,13 +148,13 @@ getData <- function(name, sql)
   {
     return(getBestSeller())
   }
-  if(name == "countPublishProduct")
+  if(name == "NN")
   {
     return(plotNN(sql));
   }
-  if(name == "countSoldProduct")
+  if(name == "NNSold")
   {
-    return(plotNNold(sql));
+    return(plotNNSold(sql));
   }
   if(name == 'soldProducts')
   {
