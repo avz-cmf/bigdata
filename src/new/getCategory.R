@@ -33,9 +33,9 @@ getCategoryName<- function(){
     {
       res = Product
       
-      res = data.frame(id = 1:nrow(res), res[c("name","id", "parentID")]);
+      res = data.frame(res[c("name","id", "parentID")]);
       
-      names(res) = c("id", "name", "value", "parentID");
+      names(res) = c("name", "id", "parentID");
       
       return(res)
     }
