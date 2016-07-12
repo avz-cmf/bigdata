@@ -72,12 +72,12 @@ predData['mounth_publish'] = weight
 predData['price'] = X.price_real
 predData['profit'] = profit
 predData['prob'] = prob
-predData['profit_from_publish'] = predProfit
+predData['profit_from_publish'] = predProfit-0.05
 predData['mean_time_to_sold'] = map(my_int, prob)
 
 delta_prob = 1.16
 predData['new_prob'] = map(lambda x: x*delta_prob/(1+x*(delta_prob-1)), predData.prob)
-predData['new_profit_from_publish'] = predData.new_prob*profit 
+predData['new_profit_from_publish'] = predData.new_prob*profit -0.15
 predData['sold'] = y
 
 group = predData.groupby(by = 'ProductID')
