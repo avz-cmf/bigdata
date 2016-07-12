@@ -6,7 +6,7 @@ plotNNSold <- function(sql)
   
   # создаем запрос
   queryData = paste("select price, sold, shipping ",
-                    "from ", myDbname, ".myParse ",
+                    "from ", 'dima_parser', ".myParse ",
                     "where ind = 1 ", sql, ";", sep = "");
   
   parse <- readTable(queryData, 'dima_parser');
