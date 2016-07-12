@@ -109,8 +109,7 @@ tableModel<- function(){
       
       names(res)[1] <- "vehicle_id";
       res = transform(res, id = 1:nrow(res))
-      res = transform(res,id=1:nrow(res))
-      
+
       return(res); 
     }
     
