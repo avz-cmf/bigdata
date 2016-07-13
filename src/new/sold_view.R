@@ -35,7 +35,7 @@ soldView <- function(sql)
     data.sold = change.sold(data.sold);
     data.view = change.view(data.view);
     
-    soldView <- function(sold = data.sold,
+    soldViewData <- function(sold = data.sold,
                          view = data.view){
       
       soldTable = data.frame(table(sold$ItemID))
@@ -59,7 +59,7 @@ soldView <- function(sql)
       return(data);
     }
     
-    return(soldView());
+    return(soldViewData());
     
   }
 }

@@ -54,6 +54,7 @@ source("decoder.R")
   source("NNSold.R")
   source('soldProducts.R')
   source('tablePublishTime.R')
+  source('sold_view.R')
 }
 
 # функция которая определят какой скрипт запускать по названию и возвращает нужные данные
@@ -163,6 +164,10 @@ getData <- function(name, sql)
   if(name == 'tablePublishTime')
   {
     return(tablePublishTime())
+  }
+  if(name == 'sold_view')
+  {
+    return(soldView(sql))
   }
   
 }
