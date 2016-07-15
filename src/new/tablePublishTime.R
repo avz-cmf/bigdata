@@ -66,7 +66,7 @@ tablePublishTime <- function()
       res = matrix(res$probPub,24,7)
       res = data.frame(res)
       res['hour'] = seq(0,23,1)
-      
+      names(res) = c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Hour')
       return(res)
     }
     return(tablePublish()) 
