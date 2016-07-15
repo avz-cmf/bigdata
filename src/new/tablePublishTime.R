@@ -18,7 +18,7 @@ tablePublishTime <- function()
   
   data.publish <- readTable(queryPublish);
   data.sold <- readTable(querySold);
-  
+  print(nrow(data.sold))
   if(!checkTable(data.publish) || !checkTable(data.sold))
   {
     return(NULL);
