@@ -64,6 +64,8 @@ tablePublishTime <- function()
       
       # создаем матрицу 24/7
       res = matrix(res$probPub,24,7)
+      res = data.frame(res)
+      res['hour'] = seq(0,23,1)
       
       return(res)
     }
