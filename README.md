@@ -212,7 +212,7 @@
 - tablePublishTime.R
     - Имя отчета: таблица количества выставлений на каждый час недели
     - Принимает: ничего
-    - Столбцы: по столбцам часы. По рядкам дни недели
+    - Столбцы: 'Monday'(float), 'Tuesday'(float), 'Wednesday'(float), 'Thursday'(float), 'Friday'(float), 'Saturday'(float), 'Sunday'(float), 'Hour'(int)
     - Возвращает: JSON матрицы 24*7 с количеством выставлений на каждый час (int)
 - soldProduct.R
     - Имя отчета: таблица количества продаж каждого из товаров
