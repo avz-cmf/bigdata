@@ -67,6 +67,9 @@ tablePublishTime <- function()
       res = data.frame(res)
       res['hour'] = seq(0,23,1)
       names(res) = c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Hour')
+      
+      res$id = seq(0,23,1)
+      
       return(res)
     }
     return(tablePublish()) 
