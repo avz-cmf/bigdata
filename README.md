@@ -214,7 +214,7 @@
     - Принимает: ничего
     - Столбцы: 'Monday'(float), 'Tuesday'(float), 'Wednesday'(float), 'Thursday'(float), 'Friday'(float), 'Saturday'(float), 'Sunday'(float), 'Hour'(int)
     - Возвращает: JSON матрицы 24*7 с количеством выставлений на каждый час (int)
-- soldProduct.R
+- soldProducts.R
     - Имя отчета: таблица количества продаж каждого из товаров
     - Принимает: бренд, номер категории, начальная дата, конечная дата
     - Возвращает: JSON таблицы ProductID(int), count_sold(int)

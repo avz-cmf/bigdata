@@ -109,7 +109,7 @@ getData <- function(name, sql)
   {
     return(createdTime(sql))
   }
-  if(name == "tableCategory")
+  if(name == "tableCategoryID")
   {
     return(tableCategory(sql))
   }
