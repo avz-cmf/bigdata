@@ -55,6 +55,7 @@ soldProducts <- function(sql)
       id = seq(1,length(x),1)
       
       res = data.frame(id, x, y);
+      names(res) = c('id', 'ProductID', 'count_sold')
       return(res);
     }
     

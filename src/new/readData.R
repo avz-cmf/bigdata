@@ -19,11 +19,12 @@
 library(RMySQL)
 
 
-readTable <- function(query, name = myDbname){
+readTable <- function(query, name = myDbname, change = TRUE){
   
-  query = sub('brand', 'products.brand', query)
-  query = sub('ebaycategory_id', 'products.category_id_path', query)
-  
+  if(change){
+    query = sub('brand', 'products.brand', query)
+    query = sub('ebaycategory_id', 'products.category_id_path', query)
+  }
   
   con <- dbConnect(MySQL(),
                    user = myBDUser,

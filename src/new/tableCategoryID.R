@@ -18,13 +18,13 @@ tableCategory <- function(sql)
   
   # запрос для product
   queryProducts = paste("select ProductID, ebaycategory_id, brand ",
-                       "from ", myDbname, ".products;");
-  
+                       "from ", myDbname, ".products;", sep = "");
+  print(queryProducts)
   data.publish <- readTable(queryPublish);
   data.sold <- readTable(querySold);
-  data.products <- readTable(queryProducts)
+  data.products <- readTable(queryProducts, change = FALSE)
   
-  
+  print("asd")
   if(!checkTable(data.publish) || !checkTable(data.sold))
   {
     return(NULL);
