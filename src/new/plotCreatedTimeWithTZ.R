@@ -14,11 +14,11 @@ createdTimeWithTZ <- function(sql)
   # запрос для sold
   querySold = paste("select sold.CreatedDate, sold.StateOrProvince ",
                     "from ", myDbname, ".sold ",
-                    "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", sql, ");", sep = "");
+                    "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID ", sql, ");", sep = "");
   
   # считываем таблицу
   data.sold <- readTable(querySold);
-  
+
   if(!checkTable(data.sold))
   {
     return(NULL);
@@ -46,13 +46,16 @@ createdTimeWithTZ <- function(sql)
       sold_state$delTime[sold_state$StateOrProvince %in% c("ND","MN","SD","IA","WI","IL","NE","KS","MO","OK","AR","TN",
                                                                            "AL","MS","LA","TX","")]=2;
       
-      created_time = ifelse(created_time+sold_state>23,created_time+sold_state-24,created_time+sold_state)
-      
+      created_time = ifelse(created_time+sold_state$delTime>23,created_time+sold_state$delTime-24,created_time+sold_state$delTime)
+
       y = hist(created_time,
                   breaks = seq(-1,23,1),
                   plot = F)$counts;
+
       x = seq(0,23,1)
+
       id = seq(1,length(x),1)
+
       res = data.frame(id, x, y);
       return(res);
     }#  функция постороения гистограммы которая возвращает имя 
