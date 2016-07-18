@@ -11,14 +11,16 @@ soldProducts <- function(sql)
 {
   # создаем запрос для publish
   queryPublish =paste("select publish.ItemID, publish.ProductID, publish.add_date ",
-                      "from ", myDbname, ".publish", ", ", myDbname, ".products ",
-                      "where publish.ProductID=products.ProductID", sql, ";", sep = "");
+                      "from ", myDbname, ".publish ",
+                      "where ItemID > 0 ", sql, ";", sep = "");
   
   # запрос для sold
   querySold = paste("select sold.ItemID ",
                     "from ", myDbname, ".sold ",
-                    "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish, ", myDbname, ".products where publish.ProductID = products.ProductID", sql, ");", sep = "");
+                    "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish ", "where ItemID > 0 ", sql, ");", sep = "");
   
+  print(queryPublish)
+  print(querySold)
   # считываем таблицу
   data.publish <- readTable(queryPublish);
   data.sold <- readTable(querySold);
