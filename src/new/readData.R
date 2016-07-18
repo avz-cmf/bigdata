@@ -74,3 +74,7 @@ change.vehicles <- function(vehicles){
   
   return(vehicles)
 }# функция для обработки таблицы vehicles
+
+change.view <- function(views){
+  return(views)
+}#функция обработки таблицы view

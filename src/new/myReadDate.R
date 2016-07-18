@@ -7,6 +7,7 @@
 library(RMySQL)
 library(DBI)
 
+myDbname = 'dima_db'
 readTable <- function(query, name = myDbname){
   
   query = sub('brand', 'products.brand', query)
@@ -62,3 +63,8 @@ change.vehicles <- function(vehicles){
   
   return(vehicles)
 }# функция для обработки таблицы vehicles
+
+
+change.view <- function(views){
+  return(views)
+}#функция обработки таблицы view

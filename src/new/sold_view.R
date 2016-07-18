@@ -15,9 +15,9 @@ soldView <- function(sql)
                     "from ", myDbname, ".sold ",
                     "where sold.ItemID in (select publish.ItemID from ",myDbname, ".publish ", "where ItemID > 0 ", sql, ");", sep = "");
   
-  queryView = paste("select view.ItemID ",
-                    "from ", myDbname, ".view ",
-                    "where view.ItemID in (select publish.ItemID from ", myDbname, ".publish ", "where ItemID > 0 ", sql, ");", sep = "")
+  queryView = paste("select views.ItemID ",
+                    "from ", myDbname, ".views ",
+                    "where views.ItemID in (select publish.ItemID from ", myDbname, ".publish ", "where ItemID > 0 ", sql, ");", sep = "")
   
   # считываем таблицу
   data.sold <- readTable(querySold);
@@ -36,13 +36,13 @@ soldView <- function(sql)
     data.view = change.view(data.view);
     
     soldViewData <- function(sold = data.sold,
-                         view = data.view){
+                             view = data.view){
       
       soldTable = data.frame(table(sold$ItemID))
       names(soldTable) = c('ItemID', 'count_sold')
       
       viewTable = data.frame(table(view$ItemID))
-      names(viewTable) = c('ItemID', 'count_sold')
+      names(viewTable) = c('ItemID', 'count_view')
       
       data = merge(soldTable,
                    viewTable,
