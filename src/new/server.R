@@ -165,7 +165,7 @@ getData <- function(name, sql)
   {
     return(tablePublishTime())
   }
-  if(name == 'sold_view')
+  if(name == 'soldView')
   {
     return(soldView(sql))
   }
