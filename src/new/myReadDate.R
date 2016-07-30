@@ -19,7 +19,7 @@ readTable <- function(query, name = myDbname, change = TRUE){
   con <- dbConnect(MySQL(),
                    user = "dima",
                    password = "5nfUNO732",
-                   host = "185.128.234.3",
+                   host = "192.168.122.23",
                    dbname=name);
   
   
