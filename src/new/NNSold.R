@@ -11,10 +11,10 @@ plotNNSold <- function(sql)
   
   parse <- readTable(queryData, 'dima_parser');
   
-  if(length(parse)==0){
+  if(nrow(parse)==0){
     return(NULL)
   }
-  
+
   maxPrice = log10(max(parse$price+parse$shipping,na.rm = T))+0.2;
   myBreaks = seq(-0.1, maxPrice, by = 0.1);
   
