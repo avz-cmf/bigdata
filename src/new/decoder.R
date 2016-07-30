@@ -71,7 +71,8 @@ decodRQL <- function(rql)
       rql = substr(rql,2,10000000);
       res = paste(res, ")", " ", log[index], " ", sep = "")
     }
-    if(!isScalar(rql) & !isLogic(rql)){
+    print(rql)
+    if(!isScalar(rql) & !isLogic(rql) & rql!=""){
       return(NULL)
     }
   }
