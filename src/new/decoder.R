@@ -71,7 +71,7 @@ decodRQL <- function(rql)
       rql = substr(rql,2,10000000);
       res = paste(res, ")", " ", log[index], " ", sep = "")
     }
-    print(rql)
+
     if(!isScalar(rql) & !isLogic(rql) & rql!=""){
       return(NULL)
     }
@@ -149,6 +149,7 @@ makeScalarQuery <- function(rql)
   {
     fun = strsplit(buf,",")[[1]][1]
     par = strsplit(buf,",")[[1]][2]
+
     if (substr(par,1,1)=='!')
     {
       res = paste(res,
@@ -183,16 +184,15 @@ isScalar <- function(opr)
 
 changeQuery <- function(query)
 {
+
   query = gsub('\\?', 'ZZ123', query)
   query = gsub('\\*', 'ZZ124', query)
-  
+
   query = URLdecode(query)
-  
   query = gsub('([[:punct:]])', '\\\\ \\1', query)
   
   query = gsub('\\ ', '\\', query)
-  
-  
+
   query = gsub('ZZ123', '_', query)
   query = gsub('ZZ124', '%', query)
   
