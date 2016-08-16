@@ -7,12 +7,13 @@ plotNN <- function(sql)
   queryData = paste("select price, title, shipping ",
                     "from ", 'dima_parser', ".myParse ",
                     "where ind > -2 ", sql, ";", sep = "");
-
-  print(queryData)
   
   parse <- readTable(queryData, 'dima_parser');
   
-  print(nrow(parse))
+  if(nrow(parse)==0){
+    return(NULL)
+  }
+  
   maxPrice = log10(max(parse$price+parse$shipping, na.rm = T))+0.3;
   
   myBreaks = seq(-0.1, maxPrice, by = 0.1);
